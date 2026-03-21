@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TOEICup 🏆 — เรียนรู้ TOEIC อย่างสนุก</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary: #1E3A8A;
+      --primary-light: #2D55C8;
+      --secondary: #F59E0B;
+      --success: #10B981;
+      --danger: #EF4444;
+      --bg: #F0F4FF;
+      --white: #FFFFFF;
+      --text: #1E293B;
+      --text-muted: #64748B;
+      --radius: 16px;
+      --shadow: 0 4px 24px rgba(30,58,138,0.12);
+      --shadow-lg: 0 8px 40px rgba(30,58,138,0.18);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #0F172A;
+      color: var(--white);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 32px;
+      background: rgba(15,23,42,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .nav-logo {
+      font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px;
+      color: var(--white); text-decoration: none;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .nav-logo span { color: var(--secondary); }
+    .nav-links { display: flex; gap: 12px; align-items: center; }
+    .nav-links a {
+      color: rgba(255,255,255,0.75); text-decoration: none;
+      font-size: 0.9rem; font-weight: 500; padding: 6px 14px; border-radius: 8px;
+      transition: all 0.2s;
+    }
+    .nav-links a:hover { color: var(--white); background: rgba(255,255,255,0.1); }
+    .btn-nav {
+      background: var(--secondary); color: #0F172A !important;
+      font-weight: 700 !important; border-radius: 10px !important;
+      padding: 8px 20px !important;
+    }
+    .btn-nav:hover { background: #FBBF24 !important; transform: translateY(-1px); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 50%, #4C1D95 100%);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 120px 24px 80px;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.4);
+      color: var(--secondary); padding: 6px 18px; border-radius: 100px;
+      font-size: 0.85rem; font-weight: 600; margin-bottom: 24px;
+      animation: fadeInDown 0.6s ease;
+    }
+    .hero h1 {
+      font-size: clamp(3.5rem, 8vw, 7rem);
+      font-weight: 900; letter-spacing: -2px; line-height: 1.05;
+      margin-bottom: 20px;
+      animation: fadeInUp 0.7s ease 0.1s both;
+    }
+    .hero h1 .highlight { color: var(--secondary); }
+    .hero-tagline {
+      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+      color: rgba(255,255,255,0.75); max-width: 560px;
+      line-height: 1.6; margin-bottom: 40px;
+      animation: fadeInUp 0.7s ease 0.2s both;
+    }
+    .hero-cta {
+      display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+      margin-bottom: 64px;
+      animation: fadeInUp 0.7s ease 0.3s both;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--secondary), #F97316);
+      color: #0F172A; font-weight: 800; font-size: 1.1rem;
+      padding: 16px 36px; border-radius: 14px; text-decoration: none;
+      border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+      box-shadow: 0 4px 20px rgba(245,158,11,0.4);
+      transition: all 0.25s; letter-spacing: 0.3px;
+    }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(245,158,11,0.5); }
+    .btn-secondary {
+      background: rgba(255,255,255,0.1); color: var(--white);
+      font-weight: 700; font-size: 1.1rem;
+      padding: 16px 36px; border-radius: 14px; text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.25); cursor: pointer;
+      display: inline-flex; align-items: center; gap: 8px;
+      transition: all 0.25s; backdrop-filter: blur(8px);
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,0.18); transform: translateY(-3px); }
+
+    /* ── STATS BAR ── */
+    .stats-bar {
+      display: flex; gap: 0; flex-wrap: wrap; justify-content: center;
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 18px; overflow: hidden; width: 100%; max-width: 680px;
+      animation: fadeInUp 0.7s ease 0.4s both;
+    }
+    .stat-item {
+      flex: 1; min-width: 180px; padding: 20px 24px; text-align: center;
+      border-right: 1px solid rgba(255,255,255,0.1);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-value { font-size: 1.6rem; font-weight: 800; color: var(--secondary); }
+    .stat-label { font-size: 0.8rem; color: rgba(255,255,255,0.6); margin-top: 2px; }
+
+    /* ── FEATURES ── */
+    .features {
+      padding: 100px 24px;
+      background: var(--bg);
+      color: var(--text);
+    }
+    .section-title {
+      text-align: center; font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 800; margin-bottom: 12px; letter-spacing: -0.5px;
+    }
+    .section-sub {
+      text-align: center; color: var(--text-muted); font-size: 1rem;
+      margin-bottom: 56px; max-width: 480px; margin-left: auto; margin-right: auto;
+    }
+    .feature-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px; max-width: 1000px; margin: 0 auto;
+    }
+    .feature-card {
+      background: var(--white); border-radius: var(--radius);
+      padding: 36px 28px; box-shadow: var(--shadow);
+      transition: all 0.3s; border: 2px solid transparent;
+    }
+    .feature-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); border-color: var(--primary); }
+    .feature-icon { font-size: 2.8rem; margin-bottom: 16px; }
+    .feature-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 10px; color: var(--primary); }
+    .feature-desc { color: var(--text-muted); line-height: 1.7; font-size: 0.95rem; }
+
+    /* ── HOW IT WORKS ── */
+    .how {
+      padding: 100px 24px;
+      background: linear-gradient(135deg, #0F172A, #1E3A8A);
+      color: var(--white);
+    }
+    .how .section-title { color: var(--white); }
+    .how .section-sub { color: rgba(255,255,255,0.6); }
+    .steps-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 32px; max-width: 900px; margin: 0 auto;
+    }
+    .step-card { text-align: center; }
+    .step-num {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: var(--secondary); color: #0F172A;
+      font-size: 1.4rem; font-weight: 900;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px;
+    }
+    .step-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+    .step-desc { font-size: 0.9rem; color: rgba(255,255,255,0.65); line-height: 1.6; }
+
+    /* ── CTA SECTION ── */
+    .cta-section {
+      padding: 100px 24px; background: var(--bg); text-align: center;
+    }
+    .cta-box {
+      max-width: 640px; margin: 0 auto;
+      background: linear-gradient(135deg, var(--primary), #4C1D95);
+      border-radius: 24px; padding: 60px 48px; color: var(--white);
+      box-shadow: var(--shadow-lg);
+    }
+    .cta-box h2 { font-size: 2rem; font-weight: 800; margin-bottom: 12px; }
+    .cta-box p { opacity: 0.8; margin-bottom: 32px; line-height: 1.6; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #0F172A; color: rgba(255,255,255,0.5);
+      text-align: center; padding: 32px 24px; font-size: 0.875rem;
+    }
+    footer a { color: var(--secondary); text-decoration: none; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 640px) {
+      nav { padding: 12px 20px; }
+      .nav-links a:not(.btn-nav) { display: none; }
+      .hero { padding: 100px 20px 60px; }
+      .stat-item { min-width: 140px; padding: 16px 12px; }
+      .cta-box { padding: 40px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVIGATION ── -->
+<nav>
+  <a class="nav-logo" href="01-landing.html">🏆 TOEIC<span>up</span></a>
+  <div class="nav-links">
+    <a href="03-dashboard.html">Dashboard</a>
+    <a href="06-leaderboard.html">Leaderboard</a>
+    <a href="07-progress.html">Progress</a>
+    <a href="02-onboarding.html" class="btn-nav">เริ่มเล่น 🚀</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-badge">✨ ฟรี 100% · ไม่ต้องลงทะเบียน</div>
+  <h1>TOEIC<span class="highlight">up</span> 🏆</h1>
+  <p class="hero-tagline">เรียนรู้ TOEIC อย่างสนุก เหมือนเล่นเกม!<br>ฝึกทำข้อสอบ · เก็บ XP · แข่งกับเพื่อน</p>
+  <div class="hero-cta">
+    <a href="02-onboarding.html" class="btn-primary">เริ่มเล่นเลย! 🚀</a>
+    <a href="06-leaderboard.html" class="btn-secondary">ดูอันดับ 🏅</a>
+  </div>
+  <div class="stats-bar">
+    <div class="stat-item">
+      <div class="stat-value">10,000+</div>
+      <div class="stat-label">👥 ผู้เล่น</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">5,000+</div>
+      <div class="stat-label">❓ คำถาม</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">990</div>
+      <div class="stat-label">🏆 คะแนนสูงสุด</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FEATURES ── -->
+<section class="features">
+  <h2 class="section-title">ทำไมต้อง TOEICup?</h2>
+  <p class="section-sub">ระบบที่ออกแบบมาให้การเรียน TOEIC ไม่น่าเบื่ออีกต่อไป</p>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-icon">🎯</div>
+      <div class="feature-title">ฝึกครบทุก Part</div>
+      <p class="feature-desc">ครอบคลุม Part 1–7 ทั้ง Listening และ Reading พร้อม Quick Tip และคำอธิบายละเอียดทุกข้อ</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+      <div class="feature-title">ติดตาม Progress</div>
+      <p class="feature-desc">กราฟแสดงคะแนนรายสัปดาห์ เห็นจุดอ่อน-จุดแข็ง วางแผนการฝึกได้อย่างชาญฉลาด</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🏆</div>
+      <div class="feature-title">แข่งขัน Leaderboard</div>
+      <p class="feature-desc">ระบบ XP และ Ranking แบบ real-time แข่งกับผู้เล่นทั่วประเทศ สนุกเหมือนเกม</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── HOW IT WORKS ── -->
+<section class="how">
+  <h2 class="section-title">เริ่มต้นง่ายมาก</h2>
+  <p class="section-sub">3 ขั้นตอน พร้อมเล่นทันที</p>
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <div class="step-title">ตั้งค่าโปรไฟล์</div>
+      <p class="step-desc">ใส่ชื่อเล่น เลือกเป้าหมาย และจุดอ่อนที่ต้องการฝึก</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <div class="step-title">เลือก Part ที่ต้องการ</div>
+      <p class="step-desc">เลือก Part ที่ต้องการฝึก หรือให้ระบบแนะนำจุดอ่อนให้</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">3</div>
+      <div class="step-title">เล่นและเก็บ XP</div>
+      <p class="step-desc">ทำข้อสอบ รับ XP และติดตาม Progress ขึ้น Leaderboard</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">4</div>
+      <div class="step-title">สอบผ่านเป้าหมาย!</div>
+      <p class="step-desc">คะแนนขึ้นอย่างต่อเนื่อง พร้อมสอบจริงด้วยความมั่นใจ</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ── -->
+<section class="cta-section">
+  <div class="cta-box">
+    <h2>พร้อมพิชิต TOEIC แล้วหรือยัง? 🚀</h2>
+    <p>เริ่มฝึกวันนี้ ฟรี ไม่มีค่าใช้จ่าย ไม่ต้องสมัครสมาชิก เริ่มเล่นได้เลย</p>
+    <a href="02-onboarding.html" class="btn-primary" style="font-size:1rem; padding: 14px 32px;">
+      เริ่มเลย ฟรี! 🎮
+    </a>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <p>© 2026 <a href="01-landing.html">TOEICup</a> · สร้างด้วย ❤️ เพื่อผู้เรียน TOEIC ทุกคน</p>
+  <p style="margin-top:8px;">
+    <a href="03-dashboard.html">Dashboard</a> ·
+    <a href="04-quiz-session.html">Quiz</a> ·
+    <a href="06-leaderboard.html">Leaderboard</a> ·
+    <a href="07-progress.html">Progress</a> ·
+    <a href="design-system.html">Design System</a>
+  </p>
+</footer>
+
+</body>
+</html>

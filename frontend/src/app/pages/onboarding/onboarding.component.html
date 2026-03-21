@@ -1,0 +1,105 @@
+<!-- ── NAV ── -->
+<nav>
+  <a class="nav-logo" routerLink="/">🏆 TOEIC<span>up</span></a>
+  <a class="nav-back" routerLink="/">← กลับหน้าหลัก</a>
+</nav>
+
+<!-- ── ONBOARDING CARD ── -->
+<div class="onboard-card">
+
+  <!-- STEPS INDICATOR -->
+  <div class="steps-wrapper">
+    <div class="step-col">
+      <div class="step-dot" [class.active]="currentStep() === 1" [class.done]="currentStep() > 1">
+        {{ currentStep() > 1 ? '✓' : '1' }}
+      </div>
+      <div class="step-label">โปรไฟล์</div>
+    </div>
+    <div class="step-connector" [class.done]="currentStep() > 1"></div>
+    <div class="step-col">
+      <div class="step-dot" [class.active]="currentStep() === 2" [class.done]="currentStep() > 2">
+        {{ currentStep() > 2 ? '✓' : '2' }}
+      </div>
+      <div class="step-label">เป้าหมาย</div>
+    </div>
+    <div class="step-connector" [class.done]="currentStep() > 2"></div>
+    <div class="step-col">
+      <div class="step-dot" [class.active]="currentStep() === 3">3</div>
+      <div class="step-label">จุดอ่อน</div>
+    </div>
+  </div>
+
+  <!-- ── STEP 1 ── -->
+  @if (currentStep() === 1) {
+    <div class="step-panel active">
+      <div class="step-title">👋 ยินดีต้อนรับ!</div>
+      <div class="step-subtitle">เริ่มต้นด้วยการตั้งชื่อเล่น เพื่อแสดงบน Leaderboard</div>
+      <div class="input-group">
+        <label>ชื่อเล่น (Nickname)</label>
+        <span class="input-icon">👤</span>
+        <input
+          type="text"
+          class="input-field"
+          placeholder="เช่น BossMax, Ploy, SomPong..."
+          maxlength="20"
+          [ngModel]="nickname()"
+          (ngModelChange)="nickname.set($event)"
+        />
+        <div class="input-hint">ใช้ 3–20 ตัวอักษร ภาษาไทยหรืออังกฤษ</div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-full btn-filled" [disabled]="!nicknameValid()" (click)="goStep(2)">ถัดไป →</button>
+      </div>
+    </div>
+  }
+
+  <!-- ── STEP 2 ── -->
+  @if (currentStep() === 2) {
+    <div class="step-panel active">
+      <div class="step-title">🎯 เป้าหมายของคุณ</div>
+      <div class="step-subtitle">เลือกระดับคะแนน TOEIC ที่ต้องการ ระบบจะปรับความยากให้เหมาะสม</div>
+      <div class="target-grid">
+        @for (t of targets; track t.value) {
+          <div class="target-card" [class.selected]="selectedTarget() === t.value" (click)="selectTarget(t.value)">
+            <div class="target-icon">{{ t.icon }}</div>
+            <div class="target-info">
+              <div class="target-name">{{ t.name }}</div>
+              <div class="target-score">{{ t.score }}</div>
+            </div>
+            <span class="target-badge" [ngClass]="t.badgeClass">{{ t.badge }}</span>
+          </div>
+        }
+      </div>
+      <div class="btn-row">
+        <button class="btn-full btn-outline" (click)="goStep(1)">← ย้อนกลับ</button>
+        <button class="btn-full btn-filled" (click)="goStep(3)">ถัดไป →</button>
+      </div>
+    </div>
+  }
+
+  <!-- ── STEP 3 ── -->
+  @if (currentStep() === 3) {
+    <div class="step-panel active">
+      <div class="step-title">🎓 จุดอ่อนที่ต้องฝึก</div>
+      <div class="step-subtitle">เลือก Part ที่รู้สึกว่ายากหรืออยากพัฒนา (เลือกได้หลายข้อ)</div>
+      <div class="weak-list">
+        @for (area of weakAreas; track area.value) {
+          <div class="weak-item" [class.checked]="isWeakSelected(area.value)" (click)="toggleWeakArea(area.value)">
+            <div class="custom-check">{{ isWeakSelected(area.value) ? '✓' : '' }}</div>
+            <div class="weak-info">
+              <div class="weak-info-title">{{ area.title }}</div>
+              <div class="weak-info-desc">{{ area.desc }}</div>
+            </div>
+          </div>
+        }
+      </div>
+      <div class="btn-row" style="margin-top: 16px;">
+        <button class="btn-full btn-outline" (click)="goStep(2)">← ย้อนกลับ</button>
+      </div>
+      <div style="margin-top: 12px;">
+        <button class="btn-start" (click)="confirm()">เริ่มเลย! 🚀 ไปยัง Dashboard</button>
+      </div>
+    </div>
+  }
+
+</div>

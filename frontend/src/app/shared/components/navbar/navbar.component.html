@@ -1,0 +1,17 @@
+@if (!hidden()) {
+  <nav>
+    <a class="nav-logo" routerLink="/">🏆 TOEIC<span>up</span></a>
+    <div class="nav-links">
+      @if (user) {
+        <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+        <a routerLink="/leaderboard" routerLinkActive="active">Leaderboard</a>
+        <a routerLink="/progress" routerLinkActive="active">Progress</a>
+        <a routerLink="/quiz" class="btn-nav">เล่นเลย 🚀</a>
+        <button class="btn-logout" (click)="logout()">ออกจากระบบ</button>
+      } @else {
+        <a routerLink="/leaderboard" routerLinkActive="active">Leaderboard</a>
+        <a routerLink="/onboarding" class="btn-nav">เริ่มเล่น 🚀</a>
+      }
+    </div>
+  </nav>
+}

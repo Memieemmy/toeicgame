@@ -1,0 +1,129 @@
+<!-- LOADING -->
+@if (state() === 'loading') {
+  <div class="loading-screen">
+    <div class="spinner"></div>
+    <p>กำลังโหลดคำถาม...</p>
+  </div>
+}
+
+<!-- ERROR -->
+@if (state() === 'error') {
+  <div class="error-screen">
+    <div class="error-icon">⚠️</div>
+    <h2>เกิดข้อผิดพลาด</h2>
+    <p>ไม่สามารถโหลดคำถามได้ กรุณาลองใหม่อีกครั้ง</p>
+    <button class="btn-retry" (click)="loadQuestions(5)">ลองใหม่</button>
+  </div>
+}
+
+<!-- QUIZ SESSION -->
+@if (state() === 'playing' || state() === 'answered') {
+  <div class="quiz-page">
+
+    <!-- SESSION HEADER -->
+    <div class="session-header">
+      <span class="session-part">Part {{ currentQuestion()?.part }} · {{ currentQuestion()?.category }}</span>
+      <span class="session-count">ข้อ {{ currentIndex() + 1 }} / {{ totalQuestions() }}</span>
+      <span class="session-xp">+{{ (currentIndex() + 1) * 10 }} XP</span>
+      <span class="session-timer" [class.warning]="timerWarning()">⏱ {{ timerDisplay() }}</span>
+    </div>
+
+    <!-- PROGRESS BAR -->
+    <div class="quiz-progress-wrap">
+      <div class="quiz-progress-fill" [style.width.%]="progressPct()"></div>
+    </div>
+
+    <!-- QUICK TIP -->
+    <div class="quick-tip">
+      <div class="tip-icon">💡</div>
+      <div>
+        <div class="tip-title">Quick Tip</div>
+        <div class="tip-text" [innerHTML]="currentQuestion()?.tip"></div>
+      </div>
+    </div>
+
+    <!-- QUESTION CARD -->
+    <div class="question-card">
+      <div class="q-type">Part {{ currentQuestion()?.part }} · {{ currentQuestion()?.category }}</div>
+      <p class="q-text">{{ currentQuestion()?.question }}</p>
+    </div>
+
+    <!-- CHOICES -->
+    <div class="choices">
+      @for (choice of currentQuestion()?.choices || []; track $index) {
+        <div class="choice"
+          [class.selected]="state() === 'playing' && selectedChoice() === $index"
+          [class.correct]="state() === 'answered' && isCorrect($index)"
+          [class.wrong]="state() === 'answered' && isWrong($index)"
+          (click)="selectChoice($index)">
+          <div class="choice-letter">{{ letters[$index] }}</div>
+          <div class="choice-text">{{ choice }}</div>
+        </div>
+      }
+    </div>
+
+    <!-- CONFIRM BUTTON -->
+    @if (state() === 'playing') {
+      <button class="btn-confirm"
+        [disabled]="selectedChoice() === null"
+        (click)="confirmAnswer()">
+        ยืนยันคำตอบ ✓
+      </button>
+    }
+
+    <!-- EXPLANATION -->
+    @if (state() === 'answered') {
+      <div class="explanation">
+        <div class="expl-header">
+          @if (isCorrect(selectedChoice()!)) {
+            <span class="expl-result correct-result">🎉 ถูกต้อง! +80 XP</span>
+          } @else {
+            <span class="expl-result wrong-result">😅 ไม่ถูก แต่เรียนรู้จากข้อนี้ได้!</span>
+          }
+        </div>
+        <div class="expl-title">📖 คำอธิบาย</div>
+        <div class="expl-text">{{ currentQuestion()?.explanation }}</div>
+      </div>
+
+      <button class="btn-next" (click)="nextQuestion()">
+        @if (currentIndex() + 1 >= totalQuestions()) {
+          ดูผลลัพธ์ 🏆
+        } @else {
+          ข้อถัดไป → (+10 XP)
+        }
+      </button>
+    }
+
+  </div>
+}
+
+<!-- RESULT SCREEN -->
+@if (state() === 'result' && result()) {
+  <div class="result-page">
+    <div class="result-card">
+      <div class="result-grade">{{ getScoreGrade() }}</div>
+      <div class="result-score">{{ result()!.correct }} / {{ result()!.total }}</div>
+      <div class="result-label">ข้อที่ตอบถูก</div>
+
+      <div class="result-stats">
+        <div class="result-stat">
+          <div class="rstat-val">{{ result()!.accuracy }}%</div>
+          <div class="rstat-lbl">Accuracy</div>
+        </div>
+        <div class="result-stat">
+          <div class="rstat-val" style="color: var(--secondary)">+{{ result()!.xpEarned }}</div>
+          <div class="rstat-lbl">XP ที่ได้รับ</div>
+        </div>
+        <div class="result-stat">
+          <div class="rstat-val" style="color: var(--success)">{{ result()!.userStreak }}</div>
+          <div class="rstat-lbl">🔥 Streak</div>
+        </div>
+      </div>
+
+      <div class="result-actions">
+        <button class="btn-again" (click)="loadQuestions(5)">เล่นอีกรอบ 🔄</button>
+        <a routerLink="/dashboard" class="btn-home">กลับ Dashboard 🏠</a>
+      </div>
+    </div>
+  </div>
+}

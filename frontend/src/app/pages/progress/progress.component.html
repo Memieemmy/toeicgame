@@ -1,0 +1,130 @@
+<div class="progress-page">
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div>
+      <h1>📊 Progress ของคุณ</h1>
+      <p>ติดตามพัฒนาการและจุดอ่อนที่ต้องฝึก</p>
+    </div>
+    <div class="level-pill">⚡ Level {{ user()?.level || 1 }} · {{ user()?.targetScore || 'Intermediate' }}</div>
+  </div>
+
+  <!-- STATS OVERVIEW -->
+  <div class="stats-grid">
+    <div class="stat-card" style="border-top-color:#F59E0B">
+      <div class="stat-icon">⭐</div>
+      <div class="stat-val">{{ user()?.xp || 0 | number }}</div>
+      <div class="stat-lbl">XP รวมทั้งหมด</div>
+    </div>
+    <div class="stat-card" style="border-top-color:#EF4444">
+      <div class="stat-icon">🔥</div>
+      <div class="stat-val">{{ user()?.streak || 0 }}</div>
+      <div class="stat-lbl">Streak (วันติดต่อกัน)</div>
+    </div>
+    <div class="stat-card" style="border-top-color:#10B981">
+      <div class="stat-icon">🎯</div>
+      <div class="stat-val">{{ accuracy() }}%</div>
+      <div class="stat-lbl">Accuracy เฉลี่ย</div>
+    </div>
+    <div class="stat-card" style="border-top-color:#1E3A8A">
+      <div class="stat-icon">✅</div>
+      <div class="stat-val">{{ user()?.totalQuestions || 0 }}</div>
+      <div class="stat-lbl">ข้อที่ทำทั้งหมด</div>
+    </div>
+  </div>
+
+  <!-- TWO COLUMN -->
+  <div class="two-col">
+
+    <!-- PART PROGRESS -->
+    <div class="card">
+      <div class="card-title">📚 Progress แต่ละ Part</div>
+      <div class="part-bars">
+        @for (p of partBars; track p.name) {
+          <div class="part-bar-item">
+            <div class="part-bar-header">
+              <span class="part-bar-name">{{ p.icon }} {{ p.name }}</span>
+              <span class="part-bar-pct" [style.color]="p.color">{{ p.pct }}%</span>
+            </div>
+            <div class="bar-track">
+              <div class="bar-fill" [style.width.%]="p.pct" [style.background]="'linear-gradient(90deg,' + p.color + 'cc,' + p.color + ')'"></div>
+            </div>
+            <div class="bar-sub">{{ p.done }} / {{ p.total }} ข้อ · Accuracy {{ p.accuracy }}%</div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- WEEKLY ACTIVITY -->
+    <div class="card">
+      <div class="card-title">📅 กิจกรรม 7 วันล่าสุด</div>
+      <div class="weekly-chart">
+        @for (d of weekDays; track d.label) {
+          <div class="day-col">
+            <div class="day-bar-wrap">
+              <div class="day-bar" [class.today]="d.today" [style.height.%]="d.pct || 5"></div>
+            </div>
+            <div class="day-label" [class.today-label]="d.today">{{ d.label }}</div>
+            <div class="day-count" [class.today-label]="d.today">{{ d.count }}</div>
+          </div>
+        }
+      </div>
+      <div class="weekly-total">สัปดาห์นี้ทำไปทั้งหมด <strong>66 ข้อ</strong> · เฉลี่ยวันละ <strong>9.4 ข้อ</strong></div>
+
+      <!-- XP BAR -->
+      <div class="xp-section">
+        <div class="xp-label">
+          <span>⭐ XP Progress — Level {{ user()?.level || 1 }}</span>
+          <strong style="color:#F59E0B">{{ xpInfo().current }} / {{ xpInfo().required }}</strong>
+        </div>
+        <div class="xp-track"><div class="xp-fill" [style.width.%]="xpInfo().pct"></div></div>
+        <div class="xp-hint">อีก {{ xpInfo().required - xpInfo().current }} XP ถึง Level {{ (user()?.level || 1) + 1 }} 🔥</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEAK AREAS + ACHIEVEMENTS -->
+  <div class="two-col">
+
+    <!-- WEAK AREAS -->
+    <div class="card">
+      <div class="card-title">⚠️ จุดอ่อนที่ต้องพัฒนา</div>
+      <div class="weak-list">
+        @for (w of weakAreas; track w.title) {
+          <div class="weak-item" [class.ok]="w.ok">
+            <div class="weak-icon">{{ w.icon }}</div>
+            <div class="weak-info">
+              <div class="weak-title">{{ w.title }}</div>
+              <div class="weak-desc">{{ w.desc }}</div>
+              <span class="weak-tag" [class.tag-ok]="w.ok" [class.tag-weak]="!w.ok">{{ w.tag }}</span>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- ACHIEVEMENTS -->
+    <div class="card">
+      <div class="card-title">🏅 Achievements</div>
+      <div class="achievements-grid">
+        @for (a of achievements; track a.name) {
+          <div class="ach-card" [class.earned]="a.earned" [class.locked]="!a.earned">
+            <div class="ach-icon">{{ a.icon }}</div>
+            <div class="ach-name">{{ a.name }}</div>
+            <div class="ach-desc">{{ a.desc }}</div>
+            <div class="ach-label" [class.earned-label]="a.earned" [class.locked-label]="!a.earned">
+              {{ a.earned ? '✅ ได้รับแล้ว' : '🔒 ยังไม่ได้รับ' }}
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- BACK TO QUIZ CTA -->
+  <div class="cta-row">
+    <a routerLink="/quiz" class="btn-quiz">เริ่มฝึกเพิ่มเลย 🚀</a>
+    <a routerLink="/leaderboard" class="btn-lb">ดู Leaderboard 🏆</a>
+  </div>
+
+</div>

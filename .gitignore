@@ -1,0 +1,22 @@
+# Node
+node_modules/
+npm-debug.log*
+
+# Angular build output
+frontend/dist/
+
+# Environment files
+backend/.env
+frontend/src/environments/environment.local.ts
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+logs/

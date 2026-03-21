@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TOEICup — Leaderboard</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary: #1E3A8A; --primary-light: #2D55C8;
+      --secondary: #F59E0B; --success: #10B981; --danger: #EF4444;
+      --bg: #F0F4FF; --white: #FFFFFF; --text: #1E293B; --text-muted: #64748B;
+      --radius: 16px; --shadow: 0 4px 24px rgba(30,58,138,0.10);
+      --shadow-lg: 0 8px 40px rgba(30,58,138,0.16);
+    }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 32px; background: rgba(15,23,42,0.92); backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .nav-logo { font-size: 1.3rem; font-weight: 800; color: #fff; text-decoration: none; }
+    .nav-logo span { color: var(--secondary); }
+    .nav-links { display: flex; gap: 8px; align-items: center; }
+    .nav-links a { color: rgba(255,255,255,0.75); text-decoration: none; font-size: 0.9rem; font-weight: 500; padding: 6px 14px; border-radius: 8px; transition: all 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: #fff; background: rgba(255,255,255,0.12); }
+    .btn-nav { background: var(--secondary) !important; color: #0F172A !important; font-weight: 700 !important; border-radius: 10px !important; padding: 8px 20px !important; }
+
+    main { padding-top: 72px; max-width: 860px; margin: 0 auto; padding-left: 24px; padding-right: 24px; padding-bottom: 100px; }
+
+    /* ── HEADER ── */
+    .page-header {
+      background: linear-gradient(135deg, #0F172A, #1E3A8A, #4C1D95);
+      border-radius: 20px; padding: 36px 32px; margin: 24px 0 24px;
+      color: #fff; text-align: center; position: relative; overflow: hidden;
+    }
+    .page-header::before {
+      content: ''; position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/svg%3E");
+    }
+    .page-header h1 { font-size: 2rem; font-weight: 900; letter-spacing: -0.5px; position: relative; }
+    .page-header p { color: rgba(255,255,255,0.65); margin-top: 6px; font-size: 0.95rem; position: relative; }
+
+    /* ── FILTER TABS ── */
+    .filter-tabs { display: flex; gap: 8px; justify-content: center; margin-bottom: 28px; }
+    .tab-btn {
+      padding: 9px 22px; border-radius: 100px; border: 2px solid #E2E8F0;
+      background: var(--white); color: var(--text-muted); font-size: 0.88rem;
+      font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.2s;
+    }
+    .tab-btn:hover { border-color: var(--primary); color: var(--primary); }
+    .tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+    /* ── PODIUM ── */
+    .podium-section { margin-bottom: 32px; }
+    .podium { display: flex; align-items: flex-end; justify-content: center; gap: 12px; }
+    .podium-item { display: flex; flex-direction: column; align-items: center; }
+    .podium-item:nth-child(1) { order: 2; } /* 1st = center */
+    .podium-item:nth-child(2) { order: 1; } /* 2nd = left */
+    .podium-item:nth-child(3) { order: 3; } /* 3rd = right */
+
+    .podium-avatar {
+      width: 60px; height: 60px; border-radius: 50%; font-size: 1.8rem;
+      display: flex; align-items: center; justify-content: center;
+      border: 3px solid transparent; margin-bottom: 8px; background: #fff;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+    .podium-item:nth-child(1) .podium-avatar { width: 76px; height: 76px; font-size: 2.2rem; border-color: #F59E0B; box-shadow: 0 0 0 4px rgba(245,158,11,0.2); }
+    .podium-item:nth-child(2) .podium-avatar { border-color: #9CA3AF; }
+    .podium-item:nth-child(3) .podium-avatar { border-color: #D97706; }
+
+    .podium-crown { font-size: 1.4rem; margin-bottom: 4px; }
+    .podium-name { font-size: 0.88rem; font-weight: 700; color: var(--text); margin-bottom: 4px; text-align: center; }
+    .podium-xp { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 8px; }
+    .podium-badge { font-size: 0.75rem; font-weight: 700; padding: 3px 10px; border-radius: 100px; }
+    .badge-gold { background: #FEF3C7; color: #92400E; }
+    .badge-silver { background: #F1F5F9; color: #475569; }
+    .badge-bronze { background: #FEF0E6; color: #92400E; }
+
+    .podium-block {
+      border-radius: 14px 14px 0 0; width: 100px; display: flex;
+      align-items: center; justify-content: center; font-size: 2rem; font-weight: 900; color: #fff;
+    }
+    .podium-item:nth-child(1) .podium-block { height: 100px; background: linear-gradient(135deg, #F59E0B, #F97316); width: 120px; }
+    .podium-item:nth-child(2) .podium-block { height: 72px; background: linear-gradient(135deg, #94A3B8, #64748B); }
+    .podium-item:nth-child(3) .podium-block { height: 56px; background: linear-gradient(135deg, #D97706, #B45309); }
+
+    /* ── LEADERBOARD TABLE ── */
+    .lb-table { background: var(--white); border-radius: 20px; box-shadow: var(--shadow); overflow: hidden; margin-bottom: 24px; }
+    .lb-row {
+      display: grid; grid-template-columns: 56px 1fr auto auto auto;
+      align-items: center; padding: 16px 24px; border-bottom: 1px solid #F1F5F9;
+      transition: background 0.15s; gap: 12px;
+    }
+    .lb-row:last-child { border-bottom: none; }
+    .lb-row:hover { background: #F8FAFF; }
+    .lb-row.me { background: #EEF2FF; border-left: 3px solid var(--primary); }
+
+    .lb-rank { font-size: 1rem; font-weight: 800; color: var(--text-muted); text-align: center; }
+    .lb-rank.top4 { color: #F59E0B; }
+    .lb-rank.top5 { color: #8B5CF6; }
+
+    .lb-user { display: flex; align-items: center; gap: 12px; }
+    .lb-avatar { width: 40px; height: 40px; border-radius: 50%; font-size: 1.3rem; background: #F0F4FF; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .lb-name { font-size: 0.95rem; font-weight: 700; color: var(--text); }
+    .lb-level { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+
+    .lb-badge { font-size: 0.72rem; font-weight: 700; padding: 3px 10px; border-radius: 100px; }
+    .badge-int { background: #FEF3C7; color: #92400E; }
+    .badge-adv { background: #EDE9FE; color: #5B21B6; }
+    .badge-beg { background: #D1FAE5; color: #065F46; }
+
+    .lb-xp { font-size: 0.9rem; font-weight: 700; color: var(--secondary); text-align: right; }
+    .lb-acc { font-size: 0.85rem; color: var(--text-muted); text-align: right; min-width: 50px; }
+
+    /* ── TABLE HEADER ── */
+    .lb-header {
+      display: grid; grid-template-columns: 56px 1fr auto auto auto;
+      padding: 12px 24px; background: #F8FAFC; border-bottom: 2px solid #E2E8F0;
+      font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; gap: 12px;
+    }
+    .lb-header span:last-child, .lb-header span:nth-child(4) { text-align: right; }
+
+    /* ── MY RANK STICKY ── */
+    .my-rank-bar {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 50;
+      background: rgba(30,58,138,0.95); backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding: 14px 24px; display: flex; align-items: center; gap: 16px;
+      color: #fff;
+    }
+    .my-rank-info { display: flex; align-items: center; gap: 12px; flex: 1; }
+    .my-rank-num { font-size: 1.5rem; font-weight: 900; color: var(--secondary); }
+    .my-rank-name { font-size: 0.95rem; font-weight: 700; }
+    .my-rank-xp { font-size: 0.8rem; color: rgba(255,255,255,0.7); }
+    .my-rank-btn {
+      padding: 10px 20px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--secondary), #F97316);
+      color: #0F172A; font-weight: 800; font-size: 0.88rem;
+      border: none; cursor: pointer; font-family: inherit; white-space: nowrap;
+    }
+
+    @media (max-width: 640px) {
+      nav { padding: 12px 16px; }
+      .nav-links a:not(.btn-nav) { display: none; }
+      main { padding-left: 16px; padding-right: 16px; }
+      .lb-row { grid-template-columns: 40px 1fr auto; gap: 8px; padding: 14px 16px; }
+      .lb-header { grid-template-columns: 40px 1fr auto; }
+      .lb-badge, .lb-acc { display: none; }
+      .podium-block { width: 80px !important; }
+      .podium-item:nth-child(1) .podium-block { width: 96px !important; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="01-landing.html">🏆 TOEIC<span>up</span></a>
+  <div class="nav-links">
+    <a href="03-dashboard.html">Dashboard</a>
+    <a href="06-leaderboard.html" class="active">Leaderboard</a>
+    <a href="07-progress.html">Progress</a>
+    <a href="04-quiz-session.html" class="btn-nav">เล่นเลย 🚀</a>
+  </div>
+</nav>
+
+<main>
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <h1>🏆 Leaderboard</h1>
+    <p>อันดับผู้เล่น TOEIC ที่ขยันที่สุดในสัปดาห์นี้</p>
+  </div>
+
+  <!-- FILTER TABS -->
+  <div class="filter-tabs">
+    <button class="tab-btn active" onclick="setTab(this)">สัปดาห์นี้</button>
+    <button class="tab-btn" onclick="setTab(this)">เดือนนี้</button>
+    <button class="tab-btn" onclick="setTab(this)">ตลอดกาล</button>
+  </div>
+
+  <!-- PODIUM TOP 3 -->
+  <div class="podium-section">
+    <div class="podium">
+      <!-- 1st -->
+      <div class="podium-item">
+        <div class="podium-crown">👑</div>
+        <div class="podium-avatar">🦁</div>
+        <div class="podium-name">SomPong_Pro</div>
+        <div class="podium-xp">⭐ 4,820 XP</div>
+        <span class="podium-badge badge-gold">🥇 อันดับ 1</span>
+        <div style="height:16px"></div>
+        <div class="podium-block">1</div>
+      </div>
+      <!-- 2nd -->
+      <div class="podium-item">
+        <div style="height:20px"></div>
+        <div class="podium-avatar">🐯</div>
+        <div class="podium-name">NamfaRocks</div>
+        <div class="podium-xp">⭐ 3,950 XP</div>
+        <span class="podium-badge badge-silver">🥈 อันดับ 2</span>
+        <div style="height:16px"></div>
+        <div class="podium-block">2</div>
+      </div>
+      <!-- 3rd -->
+      <div class="podium-item">
+        <div style="height:36px"></div>
+        <div class="podium-avatar">🦊</div>
+        <div class="podium-name">KornKrit99</div>
+        <div class="podium-xp">⭐ 3,410 XP</div>
+        <span class="podium-badge badge-bronze">🥉 อันดับ 3</span>
+        <div style="height:16px"></div>
+        <div class="podium-block">3</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABLE RANK 4-10 -->
+  <div class="lb-table">
+    <div class="lb-header">
+      <span>#</span>
+      <span>ผู้เล่น</span>
+      <span>ระดับ</span>
+      <span>XP</span>
+      <span>Acc.</span>
+    </div>
+
+    <div class="lb-row">
+      <div class="lb-rank top4">4</div>
+      <div class="lb-user"><div class="lb-avatar">🐻</div><div><div class="lb-name">PloyTOEIC</div><div class="lb-level">Level 8 · Advanced</div></div></div>
+      <span class="lb-badge badge-adv">Advanced</span>
+      <div class="lb-xp">2,980 XP</div>
+      <div class="lb-acc">88%</div>
+    </div>
+    <div class="lb-row">
+      <div class="lb-rank top4">5</div>
+      <div class="lb-user"><div class="lb-avatar">🐼</div><div><div class="lb-name">BestEnglish</div><div class="lb-level">Level 7 · Advanced</div></div></div>
+      <span class="lb-badge badge-adv">Advanced</span>
+      <div class="lb-xp">2,740 XP</div>
+      <div class="lb-acc">84%</div>
+    </div>
+    <div class="lb-row">
+      <div class="lb-rank">6</div>
+      <div class="lb-user"><div class="lb-avatar">🦋</div><div><div class="lb-name">MinnieTOEIC</div><div class="lb-level">Level 6 · Intermediate</div></div></div>
+      <span class="lb-badge badge-int">Intermediate</span>
+      <div class="lb-xp">2,310 XP</div>
+      <div class="lb-acc">79%</div>
+    </div>
+    <div class="lb-row">
+      <div class="lb-rank">7</div>
+      <div class="lb-user"><div class="lb-avatar">🐸</div><div><div class="lb-name">ArtToeicUp</div><div class="lb-level">Level 6 · Intermediate</div></div></div>
+      <span class="lb-badge badge-int">Intermediate</span>
+      <div class="lb-xp">2,090 XP</div>
+      <div class="lb-acc">76%</div>
+    </div>
+    <div class="lb-row">
+      <div class="lb-rank">8</div>
+      <div class="lb-user"><div class="lb-avatar">🦅</div><div><div class="lb-name">JirapatScore</div><div class="lb-level">Level 5 · Intermediate</div></div></div>
+      <span class="lb-badge badge-int">Intermediate</span>
+      <div class="lb-xp">1,870 XP</div>
+      <div class="lb-acc">74%</div>
+    </div>
+    <div class="lb-row">
+      <div class="lb-rank">9</div>
+      <div class="lb-user"><div class="lb-avatar">🐬</div><div><div class="lb-name">PimEnglish</div><div class="lb-level">Level 5 · Intermediate</div></div></div>
+      <span class="lb-badge badge-int">Intermediate</span>
+      <div class="lb-xp">1,640 XP</div>
+      <div class="lb-acc">71%</div>
+    </div>
+    <div class="lb-row">
+      <div class="lb-rank">10</div>
+      <div class="lb-user"><div class="lb-avatar">🌟</div><div><div class="lb-name">TOEICmaster</div><div class="lb-level">Level 4 · Beginner</div></div></div>
+      <span class="lb-badge badge-beg">Beginner</span>
+      <div class="lb-xp">1,420 XP</div>
+      <div class="lb-acc">68%</div>
+    </div>
+
+    <!-- ME -->
+    <div class="lb-row me">
+      <div class="lb-rank">24</div>
+      <div class="lb-user"><div class="lb-avatar">😎</div><div><div class="lb-name">BossMax <span style="font-size:0.75rem;color:var(--primary);font-weight:600;">(คุณ)</span></div><div class="lb-level">Level 5 · Intermediate</div></div></div>
+      <span class="lb-badge badge-int">Intermediate</span>
+      <div class="lb-xp">1,250 XP</div>
+      <div class="lb-acc">72%</div>
+    </div>
+  </div>
+</main>
+
+<!-- MY RANK STICKY BAR -->
+<div class="my-rank-bar">
+  <div class="my-rank-info">
+    <div class="my-rank-num">#24</div>
+    <div>
+      <div class="my-rank-name">😎 BossMax</div>
+      <div class="my-rank-xp">⭐ 1,250 XP · Intermediate</div>
+    </div>
+  </div>
+  <button class="my-rank-btn" onclick="location.href='04-quiz-session.html'">เก็บ XP เพิ่ม 🚀</button>
+</div>
+
+<script>
+  function setTab(el) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+  }
+</script>
+</body>
+</html>

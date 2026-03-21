@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TOEICup — Dashboard</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary: #1E3A8A;
+      --primary-light: #2D55C8;
+      --secondary: #F59E0B;
+      --success: #10B981;
+      --danger: #EF4444;
+      --bg: #F0F4FF;
+      --white: #FFFFFF;
+      --text: #1E293B;
+      --text-muted: #64748B;
+      --radius: 16px;
+      --shadow: 0 4px 24px rgba(30,58,138,0.12);
+      --shadow-lg: 0 8px 40px rgba(30,58,138,0.18);
+    }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 50%, #4C1D95 100%);
+      min-height: 100vh;
+      color: var(--white);
+      padding-top: 72px;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 32px;
+      background: rgba(15,23,42,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .nav-logo {
+      font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px;
+      color: var(--white); text-decoration: none;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .nav-logo span { color: var(--secondary); }
+    .nav-links { display: flex; gap: 8px; align-items: center; }
+    .nav-links a {
+      color: rgba(255,255,255,0.75); text-decoration: none;
+      font-size: 0.9rem; font-weight: 500; padding: 7px 14px; border-radius: 8px;
+      transition: all 0.2s;
+    }
+    .nav-links a:hover { color: var(--white); background: rgba(255,255,255,0.1); }
+    .nav-links a.active { color: var(--white); background: rgba(255,255,255,0.12); }
+    .btn-nav {
+      background: var(--secondary) !important; color: #0F172A !important;
+      font-weight: 700 !important; border-radius: 10px !important;
+      padding: 8px 20px !important;
+    }
+    .btn-nav:hover { background: #FBBF24 !important; transform: translateY(-1px); }
+
+    /* ── MAIN ── */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    /* ── HERO WELCOME ── */
+    .hero-welcome {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 24px;
+      padding: 36px 40px;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      backdrop-filter: blur(8px);
+      animation: fadeInUp 0.5s ease both;
+    }
+    .welcome-left { flex: 1; }
+    .welcome-greeting {
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 900;
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
+    }
+    .level-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(245,158,11,0.2); border: 1px solid rgba(245,158,11,0.4);
+      color: var(--secondary); padding: 5px 14px; border-radius: 100px;
+      font-size: 0.85rem; font-weight: 700; margin-bottom: 20px;
+    }
+    .xp-section { max-width: 440px; }
+    .xp-label {
+      display: flex; justify-content: space-between;
+      font-size: 0.85rem; color: rgba(255,255,255,0.7);
+      margin-bottom: 8px;
+    }
+    .xp-label strong { color: var(--secondary); }
+    .xp-bar-bg {
+      height: 12px; background: rgba(255,255,255,0.12);
+      border-radius: 100px; overflow: hidden;
+    }
+    .xp-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--secondary), #F97316);
+      border-radius: 100px;
+      width: 62.5%;
+      transition: width 1s ease;
+      box-shadow: 0 0 12px rgba(245,158,11,0.5);
+    }
+    .xp-hint { font-size: 0.78rem; color: rgba(255,255,255,0.45); margin-top: 6px; }
+    .welcome-avatar {
+      font-size: 5rem;
+      filter: drop-shadow(0 4px 16px rgba(0,0,0,0.4));
+      flex-shrink: 0;
+    }
+
+    /* ── STATS ROW ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+      animation: fadeInUp 0.5s ease 0.1s both;
+    }
+    .stat-card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius);
+      padding: 20px 20px;
+      text-align: center;
+      backdrop-filter: blur(8px);
+      transition: all 0.25s;
+    }
+    .stat-card:hover {
+      background: rgba(255,255,255,0.11);
+      transform: translateY(-3px);
+      border-color: rgba(255,255,255,0.18);
+    }
+    .stat-icon { font-size: 1.6rem; margin-bottom: 8px; }
+    .stat-num { font-size: 1.8rem; font-weight: 900; color: var(--secondary); letter-spacing: -0.5px; }
+    .stat-lbl { font-size: 0.78rem; color: rgba(255,255,255,0.6); margin-top: 3px; }
+
+    /* ── SECTION TITLE ── */
+    .section-heading {
+      font-size: 1.2rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+      color: var(--white);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .section-heading span { color: var(--secondary); }
+
+    /* ── PRACTICE GRID ── */
+    .practice-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-bottom: 32px;
+      animation: fadeInUp 0.5s ease 0.2s both;
+    }
+    .part-card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 24px 20px;
+      backdrop-filter: blur(8px);
+      transition: all 0.3s;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .part-card:hover {
+      background: rgba(255,255,255,0.13);
+      transform: translateY(-5px);
+      border-color: rgba(245,158,11,0.4);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    }
+    .part-icon { font-size: 2.2rem; }
+    .part-name { font-size: 1rem; font-weight: 800; }
+    .part-desc { font-size: 0.8rem; color: rgba(255,255,255,0.6); line-height: 1.5; flex: 1; }
+    .part-progress-wrap {
+      display: flex; flex-direction: column; gap: 5px;
+    }
+    .part-progress-top {
+      display: flex; justify-content: space-between;
+      font-size: 0.75rem; color: rgba(255,255,255,0.55);
+    }
+    .part-bar-bg {
+      height: 6px; background: rgba(255,255,255,0.1);
+      border-radius: 100px; overflow: hidden;
+    }
+    .part-bar-fill {
+      height: 100%; border-radius: 100px;
+      background: linear-gradient(90deg, #2D55C8, var(--secondary));
+      transition: width 1s ease;
+    }
+    .btn-play {
+      background: linear-gradient(135deg, var(--secondary), #F97316);
+      color: #0F172A; font-weight: 700; font-size: 0.9rem;
+      padding: 10px 16px; border-radius: 10px;
+      border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-play:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(245,158,11,0.4); }
+
+    /* ── BOTTOM GRID ── */
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      animation: fadeInUp 0.5s ease 0.3s both;
+    }
+
+    /* ── RECENT ACTIVITY ── */
+    .panel {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 28px 28px;
+      backdrop-filter: blur(8px);
+    }
+    .activity-list { display: flex; flex-direction: column; gap: 14px; }
+    .activity-item {
+      display: flex; align-items: center; gap: 16px;
+      padding: 14px 16px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.07);
+      transition: all 0.2s;
+    }
+    .activity-item:hover { background: rgba(255,255,255,0.09); }
+    .activity-icon { font-size: 1.6rem; flex-shrink: 0; }
+    .activity-info { flex: 1; }
+    .activity-title { font-size: 0.9rem; font-weight: 700; }
+    .activity-sub { font-size: 0.78rem; color: rgba(255,255,255,0.5); margin-top: 2px; }
+    .activity-xp {
+      font-size: 0.85rem; font-weight: 800;
+      color: var(--success);
+      background: rgba(16,185,129,0.12);
+      padding: 4px 10px; border-radius: 100px;
+      flex-shrink: 0;
+    }
+    .activity-time { font-size: 0.75rem; color: rgba(255,255,255,0.35); }
+
+    /* ── QUICK START ── */
+    .quick-start-box {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; gap: 20px; height: 100%;
+      min-height: 240px;
+    }
+    .qs-icon { font-size: 4rem; filter: drop-shadow(0 4px 12px rgba(245,158,11,0.4)); }
+    .qs-title { font-size: 1.3rem; font-weight: 800; }
+    .qs-sub { font-size: 0.9rem; color: rgba(255,255,255,0.6); line-height: 1.6; }
+    .btn-big-start {
+      background: linear-gradient(135deg, var(--secondary), #F97316);
+      color: #0F172A; font-weight: 900; font-size: 1.1rem;
+      padding: 16px 40px; border-radius: 14px;
+      border: none; cursor: pointer; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 10px;
+      box-shadow: 0 4px 24px rgba(245,158,11,0.45);
+      transition: all 0.25s;
+    }
+    .btn-big-start:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(245,158,11,0.55); }
+    .streak-fire {
+      display: flex; align-items: center; gap: 6px;
+      background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3);
+      color: #FCA5A5; padding: 5px 14px; border-radius: 100px;
+      font-size: 0.82rem; font-weight: 700;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 900px) {
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .practice-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      nav { padding: 12px 20px; }
+      .nav-links a:not(.btn-nav) { display: none; }
+      main { padding: 24px 16px 60px; }
+      .hero-welcome { flex-direction: column; padding: 24px 20px; }
+      .welcome-avatar { font-size: 3.5rem; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .practice-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+      .bottom-grid { grid-template-columns: 1fr; }
+      .panel { padding: 20px 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVIGATION ── -->
+<nav>
+  <a class="nav-logo" href="01-landing.html">🏆 TOEIC<span>up</span></a>
+  <div class="nav-links">
+    <a href="03-dashboard.html" class="active">Dashboard</a>
+    <a href="06-leaderboard.html">Leaderboard</a>
+    <a href="07-progress.html">Progress</a>
+    <a href="04-quiz-session.html" class="btn-nav">Quiz 🎮</a>
+  </div>
+</nav>
+
+<main>
+
+  <!-- ── HERO WELCOME ── -->
+  <div class="hero-welcome">
+    <div class="welcome-left">
+      <div class="welcome-greeting">สวัสดี, BossMax! 👋</div>
+      <div class="level-badge">⭐ Level 5 · Intermediate</div>
+      <div class="xp-section">
+        <div class="xp-label">
+          <span>XP Progress</span>
+          <strong>1,250 / 2,000 XP</strong>
+        </div>
+        <div class="xp-bar-bg">
+          <div class="xp-bar-fill" id="xpFill"></div>
+        </div>
+        <div class="xp-hint">อีก 750 XP จะ Level Up เป็น Level 6!</div>
+      </div>
+    </div>
+    <div class="welcome-avatar">🧑‍💻</div>
+  </div>
+
+  <!-- ── STATS ROW ── -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-icon">📊</div>
+      <div class="stat-num">720</div>
+      <div class="stat-lbl">คะแนนเฉลี่ย TOEIC</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🔥</div>
+      <div class="stat-num">12</div>
+      <div class="stat-lbl">วัน Streak ติดต่อกัน</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">✅</div>
+      <div class="stat-num">348</div>
+      <div class="stat-lbl">ข้อที่ทำแล้วทั้งหมด</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🎯</div>
+      <div class="stat-num">78%</div>
+      <div class="stat-lbl">Accuracy Rate</div>
+    </div>
+  </div>
+
+  <!-- ── PRACTICE SECTION ── -->
+  <div class="section-heading">🎓 เริ่มฝึกวันนี้ <span>— เลือก Part ที่ต้องการ</span></div>
+  <div class="practice-grid">
+    <div class="part-card">
+      <div class="part-icon">📝</div>
+      <div class="part-name">Part 5</div>
+      <div class="part-desc">Incomplete Sentences — คำศัพท์ Grammar Word Form</div>
+      <div class="part-progress-wrap">
+        <div class="part-progress-top">
+          <span>Progress</span>
+          <span>68%</span>
+        </div>
+        <div class="part-bar-bg">
+          <div class="part-bar-fill" style="width: 68%;"></div>
+        </div>
+      </div>
+      <a href="04-quiz-session.html" class="btn-play">▶ เล่น</a>
+    </div>
+    <div class="part-card">
+      <div class="part-icon">📄</div>
+      <div class="part-name">Part 6</div>
+      <div class="part-desc">Text Completion — เติมคำในบทความ Context + Grammar</div>
+      <div class="part-progress-wrap">
+        <div class="part-progress-top">
+          <span>Progress</span>
+          <span>45%</span>
+        </div>
+        <div class="part-bar-bg">
+          <div class="part-bar-fill" style="width: 45%;"></div>
+        </div>
+      </div>
+      <a href="04-quiz-session.html" class="btn-play">▶ เล่น</a>
+    </div>
+    <div class="part-card">
+      <div class="part-icon">📖</div>
+      <div class="part-name">Part 7</div>
+      <div class="part-desc">Reading Comprehension — อีเมล โฆษณา บทความ</div>
+      <div class="part-progress-wrap">
+        <div class="part-progress-top">
+          <span>Progress</span>
+          <span>30%</span>
+        </div>
+        <div class="part-bar-bg">
+          <div class="part-bar-fill" style="width: 30%;"></div>
+        </div>
+      </div>
+      <a href="04-quiz-session.html" class="btn-play">▶ เล่น</a>
+    </div>
+    <div class="part-card">
+      <div class="part-icon">🎧</div>
+      <div class="part-name">Listening 1–4</div>
+      <div class="part-desc">ฟังภาพ บทสนทนา Short Talk Long Conversation</div>
+      <div class="part-progress-wrap">
+        <div class="part-progress-top">
+          <span>Progress</span>
+          <span>55%</span>
+        </div>
+        <div class="part-bar-bg">
+          <div class="part-bar-fill" style="width: 55%;"></div>
+        </div>
+      </div>
+      <a href="04-quiz-session.html" class="btn-play">▶ เล่น</a>
+    </div>
+  </div>
+
+  <!-- ── BOTTOM GRID ── -->
+  <div class="bottom-grid">
+
+    <!-- Recent Activity -->
+    <div class="panel">
+      <div class="section-heading">🕐 กิจกรรมล่าสุด</div>
+      <div class="activity-list">
+        <div class="activity-item">
+          <div class="activity-icon">📝</div>
+          <div class="activity-info">
+            <div class="activity-title">Part 5 — Vocabulary</div>
+            <div class="activity-sub">ทำ 10 ข้อ · ถูก 8 ข้อ · 80% accuracy</div>
+          </div>
+          <div>
+            <div class="activity-xp">+80 XP</div>
+            <div class="activity-time" style="margin-top:4px; text-align:right;">2 ชม. ที่แล้ว</div>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-icon">🎧</div>
+          <div class="activity-info">
+            <div class="activity-title">Part 3 — Conversations</div>
+            <div class="activity-sub">ทำ 8 ข้อ · ถูก 5 ข้อ · 62% accuracy</div>
+          </div>
+          <div>
+            <div class="activity-xp">+50 XP</div>
+            <div class="activity-time" style="margin-top:4px; text-align:right;">เมื่อวาน</div>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-icon">📖</div>
+          <div class="activity-info">
+            <div class="activity-title">Part 7 — Email Reading</div>
+            <div class="activity-sub">ทำ 12 ข้อ · ถูก 9 ข้อ · 75% accuracy</div>
+          </div>
+          <div>
+            <div class="activity-xp">+90 XP</div>
+            <div class="activity-time" style="margin-top:4px; text-align:right;">2 วันก่อน</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Start -->
+    <div class="panel">
+      <div class="section-heading">🚀 Quick Start</div>
+      <div class="quick-start-box">
+        <div class="qs-icon">⚡</div>
+        <div class="qs-title">พร้อมฝึกวันนี้แล้วหรือยัง?</div>
+        <div class="qs-sub">ระบบจะแนะนำ Part ที่เหมาะกับระดับของคุณ<br>ฝึกทุกวัน รักษา Streak ให้ต่อเนื่อง!</div>
+        <div class="streak-fire">🔥 12 วัน Streak — ต่ออีกหน่อย!</div>
+        <a href="04-quiz-session.html" class="btn-big-start">เริ่มฝึกเลย! 🚀</a>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<footer style="background: rgba(15,23,42,0.6); color: rgba(255,255,255,0.4); text-align: center; padding: 28px 24px; font-size: 0.875rem; border-top: 1px solid rgba(255,255,255,0.06);">
+  <p>© 2026 <a href="01-landing.html" style="color: var(--secondary); text-decoration: none;">TOEICup</a> · สร้างด้วย ❤️ เพื่อผู้เรียน TOEIC ทุกคน</p>
+  <p style="margin-top: 8px;">
+    <a href="03-dashboard.html" style="color: var(--secondary); text-decoration: none;">Dashboard</a> ·
+    <a href="04-quiz-session.html" style="color: var(--secondary); text-decoration: none;">Quiz</a> ·
+    <a href="06-leaderboard.html" style="color: var(--secondary); text-decoration: none;">Leaderboard</a> ·
+    <a href="07-progress.html" style="color: var(--secondary); text-decoration: none;">Progress</a>
+  </p>
+</footer>
+
+<script>
+  // Animate XP bar on load
+  window.addEventListener('load', () => {
+    const fill = document.getElementById('xpFill');
+    if (fill) { fill.style.width = '62.5%'; }
+  });
+</script>
+</body>
+</html>

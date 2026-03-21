@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TOEICup — Progress</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary: #1E3A8A; --primary-light: #2D55C8;
+      --secondary: #F59E0B; --success: #10B981; --danger: #EF4444;
+      --bg: #F0F4FF; --white: #FFFFFF; --text: #1E293B; --text-muted: #64748B;
+      --radius: 16px; --shadow: 0 4px 24px rgba(30,58,138,0.10);
+      --shadow-lg: 0 8px 40px rgba(30,58,138,0.16);
+    }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 32px; background: rgba(15,23,42,0.92); backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .nav-logo { font-size: 1.3rem; font-weight: 800; color: #fff; text-decoration: none; }
+    .nav-logo span { color: var(--secondary); }
+    .nav-links { display: flex; gap: 8px; align-items: center; }
+    .nav-links a { color: rgba(255,255,255,0.75); text-decoration: none; font-size: 0.9rem; font-weight: 500; padding: 6px 14px; border-radius: 8px; transition: all 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: #fff; background: rgba(255,255,255,0.12); }
+    .btn-nav { background: var(--secondary) !important; color: #0F172A !important; font-weight: 700 !important; border-radius: 10px !important; padding: 8px 20px !important; }
+
+    main { padding-top: 72px; max-width: 960px; margin: 0 auto; padding-left: 24px; padding-right: 24px; padding-bottom: 48px; }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      background: linear-gradient(135deg, #0F172A, #1E3A8A, #4C1D95);
+      border-radius: 20px; padding: 36px 32px; margin: 24px 0 24px;
+      color: #fff; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;
+      position: relative; overflow: hidden;
+    }
+    .page-header::before {
+      content: ''; position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/svg%3E");
+    }
+    .header-left { position: relative; }
+    .header-left h1 { font-size: 1.8rem; font-weight: 900; margin-bottom: 6px; }
+    .header-left p { color: rgba(255,255,255,0.65); font-size: 0.9rem; }
+    .level-pill {
+      position: relative; display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(245,158,11,0.2); border: 1px solid rgba(245,158,11,0.4);
+      color: var(--secondary); padding: 10px 20px; border-radius: 100px;
+      font-size: 0.9rem; font-weight: 700;
+    }
+
+    /* ── STATS GRID ── */
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+    .stat-card {
+      background: var(--white); border-radius: var(--radius); padding: 24px 20px;
+      box-shadow: var(--shadow); text-align: center; border-top: 3px solid transparent; transition: all 0.25s;
+    }
+    .stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+    .stat-card:nth-child(1) { border-top-color: var(--secondary); }
+    .stat-card:nth-child(2) { border-top-color: #EF4444; }
+    .stat-card:nth-child(3) { border-top-color: var(--success); }
+    .stat-card:nth-child(4) { border-top-color: var(--primary); }
+    .stat-icon { font-size: 1.8rem; margin-bottom: 8px; }
+    .stat-val { font-size: 2rem; font-weight: 900; color: var(--text); line-height: 1; }
+    .stat-lbl { font-size: 0.8rem; color: var(--text-muted); margin-top: 6px; }
+
+    /* ── 2-COL LAYOUT ── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+    .card { background: var(--white); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); }
+    .card-title { font-size: 1rem; font-weight: 800; color: var(--text); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+
+    /* ── PROGRESS BY PART ── */
+    .part-bars { display: flex; flex-direction: column; gap: 16px; }
+    .part-bar-item {}
+    .part-bar-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+    .part-bar-name { font-size: 0.88rem; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 8px; }
+    .part-bar-pct { font-size: 0.85rem; font-weight: 700; }
+    .bar-track { background: #E2E8F0; border-radius: 100px; height: 10px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 100px; transition: width 0.8s ease; }
+    .bar-fill.p5 { background: linear-gradient(90deg, #1E3A8A, #2D55C8); }
+    .bar-fill.p6 { background: linear-gradient(90deg, #7C3AED, #8B5CF6); }
+    .bar-fill.p7 { background: linear-gradient(90deg, #059669, #10B981); }
+    .bar-fill.listening { background: linear-gradient(90deg, #D97706, #F59E0B); }
+    .bar-sub { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; }
+
+    /* ── WEEKLY ACTIVITY ── */
+    .weekly-chart { display: flex; align-items: flex-end; gap: 10px; height: 100px; margin-bottom: 12px; }
+    .day-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .day-bar-wrap { flex: 1; width: 100%; display: flex; align-items: flex-end; }
+    .day-bar {
+      width: 100%; border-radius: 6px 6px 0 0;
+      background: linear-gradient(180deg, var(--primary-light), var(--primary));
+      transition: height 0.5s; min-height: 4px;
+    }
+    .day-bar.today { background: linear-gradient(180deg, #F97316, var(--secondary)); }
+    .day-bar.empty { background: #E2E8F0; }
+    .day-label { font-size: 0.72rem; color: var(--text-muted); font-weight: 600; }
+    .day-count { font-size: 0.72rem; color: var(--text-muted); }
+    .weekly-total { font-size: 0.85rem; color: var(--text-muted); text-align: center; }
+    .weekly-total strong { color: var(--text); }
+
+    /* ── WEAK AREAS ── */
+    .weak-list { display: flex; flex-direction: column; gap: 12px; }
+    .weak-item {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 14px 16px; border-radius: 12px; border: 1.5px solid #FEE2E2; background: #FFF7F7;
+    }
+    .weak-item.ok { border-color: #D1FAE5; background: #F0FDF4; }
+    .weak-icon { font-size: 1.4rem; flex-shrink: 0; }
+    .weak-info { flex: 1; }
+    .weak-title { font-size: 0.9rem; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+    .weak-desc { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
+    .weak-tag { font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 100px; margin-top: 6px; display: inline-block; }
+    .tag-weak { background: #FEE2E2; color: #991B1B; }
+    .tag-ok { background: #D1FAE5; color: #065F46; }
+
+    /* ── ACHIEVEMENTS ── */
+    .achievements-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .ach-card {
+      border-radius: 14px; padding: 20px 16px; text-align: center;
+      border: 2px solid #E2E8F0; background: var(--white); transition: all 0.25s;
+    }
+    .ach-card.earned { border-color: var(--secondary); background: #FFFBEB; }
+    .ach-card:hover.earned { transform: translateY(-3px); box-shadow: 0 4px 16px rgba(245,158,11,0.2); }
+    .ach-card.locked { opacity: 0.5; filter: grayscale(0.6); }
+    .ach-icon { font-size: 2.4rem; margin-bottom: 10px; }
+    .ach-name { font-size: 0.85rem; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .ach-desc { font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; }
+    .ach-earned-label { font-size: 0.7rem; font-weight: 700; color: var(--secondary); margin-top: 8px; }
+    .ach-locked-label { font-size: 0.7rem; color: var(--text-muted); margin-top: 8px; }
+
+    @media (max-width: 900px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      nav { padding: 12px 16px; }
+      .nav-links a:not(.btn-nav) { display: none; }
+      main { padding-left: 16px; padding-right: 16px; }
+      .two-col { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .achievements-grid { grid-template-columns: repeat(3, 1fr); }
+      .page-header { padding: 28px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="01-landing.html">🏆 TOEIC<span>up</span></a>
+  <div class="nav-links">
+    <a href="03-dashboard.html">Dashboard</a>
+    <a href="06-leaderboard.html">Leaderboard</a>
+    <a href="07-progress.html" class="active">Progress</a>
+    <a href="04-quiz-session.html" class="btn-nav">เล่นเลย 🚀</a>
+  </div>
+</nav>
+
+<main>
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="header-left">
+      <h1>📊 Progress ของคุณ</h1>
+      <p>ติดตามพัฒนาการและจุดอ่อนที่ต้องฝึกเพิ่ม</p>
+    </div>
+    <div class="level-pill">⚡ Level 5 · Intermediate · อีก 750 XP ถึง Level 6</div>
+  </div>
+
+  <!-- STATS OVERVIEW -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">⭐</div>
+      <div class="stat-val">1,250</div>
+      <div class="stat-lbl">XP รวมทั้งหมด</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🔥</div>
+      <div class="stat-val">12</div>
+      <div class="stat-lbl">Streak (วันติดต่อกัน)</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🎯</div>
+      <div class="stat-val">72%</div>
+      <div class="stat-lbl">Accuracy เฉลี่ย</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">✅</div>
+      <div class="stat-val">342</div>
+      <div class="stat-lbl">ข้อที่ทำทั้งหมด</div>
+    </div>
+  </div>
+
+  <!-- PROGRESS BY PART + WEEKLY ACTIVITY -->
+  <div class="two-col">
+    <!-- PART PROGRESS -->
+    <div class="card">
+      <div class="card-title">📚 Progress แต่ละ Part</div>
+      <div class="part-bars">
+        <div class="part-bar-item">
+          <div class="part-bar-header">
+            <span class="part-bar-name">📝 Part 5 — Grammar & Vocabulary</span>
+            <span class="part-bar-pct" style="color:#1E3A8A">68%</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill p5" style="width:68%"></div></div>
+          <div class="bar-sub">136 / 200 ข้อ · Accuracy 74%</div>
+        </div>
+        <div class="part-bar-item">
+          <div class="part-bar-header">
+            <span class="part-bar-name">📄 Part 6 — Text Completion</span>
+            <span class="part-bar-pct" style="color:#7C3AED">35%</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill p6" style="width:35%"></div></div>
+          <div class="bar-sub">42 / 120 ข้อ · Accuracy 66%</div>
+        </div>
+        <div class="part-bar-item">
+          <div class="part-bar-header">
+            <span class="part-bar-name">📖 Part 7 — Reading Comprehension</span>
+            <span class="part-bar-pct" style="color:#059669">20%</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill p7" style="width:20%"></div></div>
+          <div class="bar-sub">30 / 150 ข้อ · Accuracy 60%</div>
+        </div>
+        <div class="part-bar-item">
+          <div class="part-bar-header">
+            <span class="part-bar-name">🎧 Parts 1–4 — Listening</span>
+            <span class="part-bar-pct" style="color:#D97706">50%</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill listening" style="width:50%"></div></div>
+          <div class="bar-sub">60 / 120 ข้อ · Accuracy 78%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEEKLY ACTIVITY -->
+    <div class="card">
+      <div class="card-title">📅 กิจกรรม 7 วันล่าสุด</div>
+      <div class="weekly-chart">
+        <div class="day-col">
+          <div class="day-bar-wrap"><div class="day-bar" style="height:40%"></div></div>
+          <div class="day-label">จ</div>
+          <div class="day-count">8</div>
+        </div>
+        <div class="day-col">
+          <div class="day-bar-wrap"><div class="day-bar" style="height:65%"></div></div>
+          <div class="day-label">อ</div>
+          <div class="day-count">13</div>
+        </div>
+        <div class="day-col">
+          <div class="day-bar-wrap"><div class="day-bar" style="height:30%"></div></div>
+          <div class="day-label">พ</div>
+          <div class="day-count">6</div>
+        </div>
+        <div class="day-col">
+          <div class="day-bar-wrap"><div class="day-bar" style="height:80%"></div></div>
+          <div class="day-label">พฤ</div>
+          <div class="day-count">16</div>
+        </div>
+        <div class="day-col">
+          <div class="day-bar-wrap"><div class="day-bar" style="height:55%"></div></div>
+          <div class="day-label">ศ</div>
+          <div class="day-count">11</div>
+        </div>
+        <div class="day-col">
+          <div class="day-bar-wrap"><div class="day-bar empty" style="height:10%"></div></div>
+          <div class="day-label">ส</div>
+          <div class="day-count">2</div>
+        </div>
+        <div class="day-col">
+          <div class="day-bar-wrap"><div class="day-bar today" style="height:50%"></div></div>
+          <div class="day-label" style="color:var(--secondary);font-weight:800">อา</div>
+          <div class="day-count" style="color:var(--secondary)">10</div>
+        </div>
+      </div>
+      <div class="weekly-total">สัปดาห์นี้ทำไปทั้งหมด <strong>66 ข้อ</strong> · เฉลี่ยวันละ <strong>9.4 ข้อ</strong></div>
+
+      <!-- XP PROGRESS -->
+      <div style="margin-top:20px; padding-top:20px; border-top:1px solid #F1F5F9">
+        <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:8px;">
+          <span style="font-weight:700; color:var(--text)">⭐ XP Progress — Level 5 → 6</span>
+          <span style="color:var(--secondary); font-weight:700">1,250 / 2,000</span>
+        </div>
+        <div style="background:#E2E8F0; border-radius:100px; height:12px; overflow:hidden">
+          <div style="background:linear-gradient(90deg,var(--secondary),#F97316); width:62.5%; height:100%; border-radius:100px;"></div>
+        </div>
+        <div style="font-size:0.75rem; color:var(--text-muted); margin-top:6px;">อีก 750 XP ถึง Level 6 · Advanced 🔥</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEAK AREAS + ACHIEVEMENTS -->
+  <div class="two-col">
+    <!-- WEAK AREAS -->
+    <div class="card">
+      <div class="card-title">⚠️ จุดอ่อนที่ต้องพัฒนา</div>
+      <div class="weak-list">
+        <div class="weak-item">
+          <div class="weak-icon">📖</div>
+          <div class="weak-info">
+            <div class="weak-title">Part 7 — Reading Comprehension</div>
+            <div class="weak-desc">Accuracy เพียง 60% · แนะนำให้ฝึก inference questions และ double passage ให้มากขึ้น</div>
+            <span class="weak-tag tag-weak">ต้องฝึกด่วน</span>
+          </div>
+        </div>
+        <div class="weak-item">
+          <div class="weak-icon">📄</div>
+          <div class="weak-info">
+            <div class="weak-title">Part 6 — Context Clues</div>
+            <div class="weak-desc">Accuracy 66% · มักพลาดคำที่ต้องอาศัย context ของทั้งย่อหน้า ฝึกอ่านแบบ skimming</div>
+            <span class="weak-tag tag-weak">ควรปรับปรุง</span>
+          </div>
+        </div>
+        <div class="weak-item ok">
+          <div class="weak-icon">🎧</div>
+          <div class="weak-info">
+            <div class="weak-title">Parts 1–4 — Listening</div>
+            <div class="weak-desc">Accuracy 78% · ทำได้ดี! ฝึกต่อเนื่องเพื่อรักษาระดับไว้</div>
+            <span class="weak-tag tag-ok">ทำได้ดี ✅</span>
+          </div>
+        </div>
+        <div class="weak-item ok">
+          <div class="weak-icon">📝</div>
+          <div class="weak-info">
+            <div class="weak-title">Part 5 — Grammar & Vocabulary</div>
+            <div class="weak-desc">Accuracy 74% · จุดแข็งของคุณ พยายามรักษาให้อยู่เหนือ 80%</div>
+            <span class="weak-tag tag-ok">ค่อนข้างดี ✅</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACHIEVEMENTS -->
+    <div class="card">
+      <div class="card-title">🏅 Achievements</div>
+      <div class="achievements-grid">
+        <div class="ach-card earned">
+          <div class="ach-icon">🔥</div>
+          <div class="ach-name">7-Day Streak</div>
+          <div class="ach-desc">ฝึกติดต่อกัน 7 วัน</div>
+          <div class="ach-earned-label">✅ ได้รับแล้ว</div>
+        </div>
+        <div class="ach-card earned">
+          <div class="ach-icon">💯</div>
+          <div class="ach-name">Perfect Set</div>
+          <div class="ach-desc">ทำถูก 10/10 ใน 1 เซต</div>
+          <div class="ach-earned-label">✅ ได้รับแล้ว</div>
+        </div>
+        <div class="ach-card earned">
+          <div class="ach-icon">📚</div>
+          <div class="ach-name">100 Questions</div>
+          <div class="ach-desc">ทำครบ 100 ข้อ</div>
+          <div class="ach-earned-label">✅ ได้รับแล้ว</div>
+        </div>
+        <div class="ach-card locked">
+          <div class="ach-icon">⚡</div>
+          <div class="ach-name">Speed Demon</div>
+          <div class="ach-desc">ตอบถูก 5 ข้อภายใน 1 นาที</div>
+          <div class="ach-locked-label">🔒 ยังไม่ได้รับ</div>
+        </div>
+        <div class="ach-card locked">
+          <div class="ach-icon">🏆</div>
+          <div class="ach-name">Top 10</div>
+          <div class="ach-desc">ติด Top 10 Leaderboard</div>
+          <div class="ach-locked-label">🔒 ยังไม่ได้รับ</div>
+        </div>
+        <div class="ach-card locked">
+          <div class="ach-icon">🌟</div>
+          <div class="ach-name">Level 10</div>
+          <div class="ach-desc">ถึง Level 10 Master</div>
+          <div class="ach-locked-label">🔒 ยังไม่ได้รับ</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+</body>
+</html>

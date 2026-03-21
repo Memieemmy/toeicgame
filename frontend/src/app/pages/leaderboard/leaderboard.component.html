@@ -1,0 +1,71 @@
+<div class="lb-page">
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <h1>🏆 Leaderboard</h1>
+    <p>อันดับผู้เล่น TOEIC ที่ขยันที่สุด</p>
+  </div>
+
+  <!-- FILTER TABS -->
+  <div class="filter-tabs">
+    <button class="tab-btn" [class.active]="activeTab() === 'week'" (click)="setTab('week')">สัปดาห์นี้</button>
+    <button class="tab-btn" [class.active]="activeTab() === 'month'" (click)="setTab('month')">เดือนนี้</button>
+    <button class="tab-btn" [class.active]="activeTab() === 'all'" (click)="setTab('all')">ตลอดกาล</button>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-row"><div class="spinner"></div><span>กำลังโหลด...</span></div>
+  } @else {
+
+    <!-- TOP 3 PODIUM -->
+    <div class="podium">
+      @for (entry of top3; track entry.rank) {
+        <div class="podium-item" [attr.data-rank]="entry.rank">
+          @if (entry.rank === 1) { <div class="crown">👑</div> }
+          <div class="podium-avatar" [class.gold]="entry.rank===1" [class.silver]="entry.rank===2" [class.bronze]="entry.rank===3">{{ entry.avatar }}</div>
+          <div class="podium-name">{{ entry.nickname }}</div>
+          <div class="podium-xp">⭐ {{ entry.xp | number }} XP</div>
+          <div class="podium-medal">{{ entry.rank === 1 ? '🥇' : entry.rank === 2 ? '🥈' : '🥉' }}</div>
+          <div class="podium-block" [class.gold-block]="entry.rank===1" [class.silver-block]="entry.rank===2" [class.bronze-block]="entry.rank===3">{{ entry.rank }}</div>
+        </div>
+      }
+    </div>
+
+    <!-- TABLE rank 4-10+ -->
+    <div class="lb-table">
+      <div class="lb-header">
+        <span>#</span><span>ผู้เล่น</span><span>ระดับ</span><span>XP</span><span>Acc.</span>
+      </div>
+      @for (entry of rest; track entry.rank) {
+        <div class="lb-row" [class.me-row]="entry.isMe">
+          <div class="lb-rank">{{ entry.rank }}</div>
+          <div class="lb-user">
+            <div class="lb-avatar">{{ entry.avatar }}</div>
+            <div>
+              <div class="lb-name">{{ entry.nickname }} @if(entry.isMe){<span class="me-label">(คุณ)</span>}</div>
+              <div class="lb-level">Level {{ entry.level }}</div>
+            </div>
+          </div>
+          <span class="lb-badge" [ngClass]="badgeClass(entry.targetScore)">{{ badgeLabel(entry.targetScore) }}</span>
+          <div class="lb-xp">{{ entry.xp | number }} XP</div>
+          <div class="lb-acc">{{ entry.accuracy }}%</div>
+        </div>
+      }
+    </div>
+
+  }
+</div>
+
+<!-- MY RANK STICKY BAR -->
+@if (myEntry()) {
+  <div class="my-rank-bar">
+    <div class="my-rank-info">
+      <div class="my-rank-num">#{{ myEntry()!.rank }}</div>
+      <div>
+        <div class="my-rank-name">{{ myEntry()!.avatar }} {{ myEntry()!.nickname }}</div>
+        <div class="my-rank-xp">⭐ {{ myEntry()!.xp }} XP</div>
+      </div>
+    </div>
+    <a routerLink="/quiz" class="my-rank-btn">เก็บ XP เพิ่ม 🚀</a>
+  </div>
+}

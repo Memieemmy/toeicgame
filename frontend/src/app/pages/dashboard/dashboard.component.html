@@ -1,0 +1,106 @@
+<main>
+
+  <!-- ── HERO WELCOME ── -->
+  <div class="hero-welcome">
+    <div class="welcome-left">
+      <div class="welcome-greeting">สวัสดี, {{ user()?.nickname || 'นักเรียน' }}! 👋</div>
+      <div class="level-badge">⭐ Level {{ user()?.level || 1 }} · {{ user()?.targetScore || 'Intermediate' }}</div>
+      <div class="xp-section">
+        <div class="xp-label">
+          <span>XP Progress</span>
+          <strong>{{ xpForLevel().current }} / {{ xpForLevel().required }} XP</strong>
+        </div>
+        <div class="xp-bar-bg">
+          <div class="xp-bar-fill" [style.width.%]="xpForLevel().pct"></div>
+        </div>
+        <div class="xp-hint">อีก {{ xpForLevel().required - xpForLevel().current }} XP จะ Level Up!</div>
+      </div>
+    </div>
+    <div class="welcome-avatar">🧑‍💻</div>
+  </div>
+
+  <!-- ── STATS ROW ── -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-icon">⭐</div>
+      <div class="stat-num">{{ user()?.xp || 0 }}</div>
+      <div class="stat-lbl">XP รวม</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🔥</div>
+      <div class="stat-num">{{ user()?.streak || 0 }}</div>
+      <div class="stat-lbl">วัน Streak ติดต่อกัน</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">✅</div>
+      <div class="stat-num">{{ user()?.totalQuestions || 0 }}</div>
+      <div class="stat-lbl">ข้อที่ทำแล้วทั้งหมด</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🎯</div>
+      <div class="stat-num">{{ accuracy() }}%</div>
+      <div class="stat-lbl">Accuracy Rate</div>
+    </div>
+  </div>
+
+  <!-- ── PRACTICE SECTION ── -->
+  <div class="section-heading">🎓 เริ่มฝึกวันนี้ <span>— เลือก Part ที่ต้องการ</span></div>
+  <div class="practice-grid">
+    @for (card of partCards; track card.part) {
+      <div class="part-card">
+        <div class="part-icon">{{ card.icon }}</div>
+        <div class="part-name">{{ card.name }}</div>
+        <div class="part-desc">{{ card.desc }}</div>
+        <div class="part-progress-wrap">
+          <div class="part-progress-top">
+            <span>Progress</span>
+            <span>{{ card.progress }}%</span>
+          </div>
+          <div class="part-bar-bg">
+            <div class="part-bar-fill" [style.width.%]="card.progress"></div>
+          </div>
+        </div>
+        <a [routerLink]="['/quiz']" [queryParams]="{part: card.part}" class="btn-play">▶ เล่น</a>
+      </div>
+    }
+  </div>
+
+  <!-- ── BOTTOM GRID ── -->
+  <div class="bottom-grid">
+
+    <!-- RECENT ACTIVITY -->
+    <div class="panel">
+      <div class="section-heading" style="margin-bottom:16px;">📈 กิจกรรมล่าสุด</div>
+      <div class="activity-list">
+        @for (item of recentActivity; track item.title) {
+          <div class="activity-item">
+            <div class="activity-icon">{{ item.icon }}</div>
+            <div class="activity-info">
+              <div class="activity-title">{{ item.title }}</div>
+              <div class="activity-sub">{{ item.sub }}</div>
+            </div>
+            <div>
+              <div class="activity-xp">{{ item.xp }}</div>
+              <div class="activity-time">{{ item.time }}</div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- QUICK START -->
+    <div class="panel">
+      <div class="quick-start-box">
+        <div class="qs-icon">🚀</div>
+        <div class="qs-title">พร้อมเล่นแล้วหรือยัง?</div>
+        <div class="qs-sub">กด Quiz เพื่อเริ่มทำข้อสอบ<br>เก็บ XP และ Streak ไปพร้อมกัน!</div>
+        @if (user()?.streak && user()!.streak > 0) {
+          <div class="streak-fire">🔥 Streak {{ user()!.streak }} วัน!</div>
+        }
+        <a routerLink="/quiz" class="btn-big-start">เล่นเลย! 🎮</a>
+      </div>
+    </div>
+
+  </div>
+
+</main>
