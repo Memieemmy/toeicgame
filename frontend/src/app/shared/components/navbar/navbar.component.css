@@ -19,6 +19,7 @@ nav {
   padding: 7px 14px; border-radius: 10px; transition: all 0.2s;
 }
 .nav-links a:hover { color: #2E5A6B; background: #DAFAFA; }
+.nav-links a:active { background: #C3EEFA; color: #1A3A4A; }
 .nav-links a.active { color: #2E5A6B; background: #C3EEFA; font-weight: 600; }
 .btn-nav {
   background: #9DCAEB !important;
@@ -27,6 +28,7 @@ nav {
   box-shadow: 0 2px 8px rgba(157,202,235,0.20) !important;
 }
 .btn-nav:hover { transform: translateY(-1px); background: #AFD5F0 !important; box-shadow: 0 4px 16px rgba(157,202,235,0.25) !important; }
+.btn-nav:active { background: #C3EEFA !important; transform: translateY(0) !important; box-shadow: none !important; }
 .nav-user {
   display: flex; align-items: center; gap: 8px;
   background: #DAFAFA; border: 1px solid #AFD5F0;

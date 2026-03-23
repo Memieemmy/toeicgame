@@ -61,6 +61,7 @@
   background: #fff;
 }
 .choice:hover { border-color: #9DCAEB; background: #DAFAFA; }
+.choice:active { background: #C3EEFA; border-color: #9DCAEB; }
 .choice.selected { border-color: #9DCAEB; background: #DAFAFA; box-shadow: 0 0 0 4px rgba(157,202,235,0.10); }
 .choice.correct { border-color: #10B981; background: #D1FAE5; pointer-events: none; }
 .choice.wrong { border-color: #EF4444; background: #FEE2E2; pointer-events: none; }
@@ -81,6 +82,7 @@
   box-shadow: 0 4px 16px rgba(157,202,235,0.15);
 }
 .btn-confirm:hover:not(:disabled) { background: #AFD5F0; transform: translateY(-2px); box-shadow: 0 6px 24px rgba(157,202,235,0.20); }
+.btn-confirm:active:not(:disabled) { background: #C3EEFA; transform: translateY(0); box-shadow: none; }
 .btn-confirm:disabled { background: #C3EEFA; color: #9DCAEB; cursor: not-allowed; box-shadow: none; }
 
 .explanation {
@@ -104,6 +106,7 @@
   box-shadow: 0 4px 16px rgba(157,202,235,0.15);
 }
 .btn-next:hover { background: #AFD5F0; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(157,202,235,0.20); }
+.btn-next:active { background: #C3EEFA; transform: translateY(0); box-shadow: none; }
 
 /* RESULT */
 .result-page {
@@ -132,6 +135,7 @@
   font-family: inherit; transition: all 0.2s; box-shadow: 0 4px 16px rgba(157,202,235,0.15);
 }
 .btn-again:hover { background: #AFD5F0; transform: translateY(-2px); box-shadow: 0 6px 24px rgba(157,202,235,0.20); }
+.btn-again:active { background: #C3EEFA; transform: translateY(0); box-shadow: none; }
 .btn-home {
   padding: 14px; border-radius: 12px; border: 1.5px solid #AFD5F0;
   color: #6A8EA0; font-weight: 700; font-size: 1rem; text-decoration: none;
