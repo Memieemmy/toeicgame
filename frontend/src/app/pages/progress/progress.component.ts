@@ -35,7 +35,7 @@ export class ProgressComponent {
     { icon: '📝', name: 'Part 5 — Grammar & Vocabulary', pct: 68, color: '#1E3A8A', done: 136, total: 200, accuracy: 74 },
     { icon: '📄', name: 'Part 6 — Text Completion', pct: 35, color: '#7C3AED', done: 42, total: 120, accuracy: 66 },
     { icon: '📖', name: 'Part 7 — Reading', pct: 20, color: '#059669', done: 30, total: 150, accuracy: 60 },
-    { icon: '🎧', name: 'Parts 1–4 — Listening', pct: 50, color: '#D97706', done: 60, total: 120, accuracy: 78 },
+    { icon: '🎧', name: 'Parts 1–4 — Listening', pct: 50, color: '#9DCAEB', done: 60, total: 120, accuracy: 78 },
   ];
 
   weekDays = [

@@ -11,7 +11,7 @@
 
   <!-- STATS OVERVIEW -->
   <div class="stats-grid">
-    <div class="stat-card" style="border-top-color:#F59E0B">
+    <div class="stat-card" style="border-top-color:#5BA3C9">
       <div class="stat-icon">⭐</div>
       <div class="stat-val">{{ user()?.xp || 0 | number }}</div>
       <div class="stat-lbl">XP รวมทั้งหมด</div>
@@ -75,7 +75,7 @@
       <div class="xp-section">
         <div class="xp-label">
           <span>⭐ XP Progress — Level {{ user()?.level || 1 }}</span>
-          <strong style="color:#F59E0B">{{ xpInfo().current }} / {{ xpInfo().required }}</strong>
+          <strong style="color:#5BA3C9">{{ xpInfo().current }} / {{ xpInfo().required }}</strong>
         </div>
         <div class="xp-track"><div class="xp-fill" [style.width.%]="xpInfo().pct"></div></div>
         <div class="xp-hint">อีก {{ xpInfo().required - xpInfo().current }} XP ถึง Level {{ (user()?.level || 1) + 1 }} 🔥</div>
