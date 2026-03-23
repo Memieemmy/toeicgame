@@ -20,6 +20,10 @@ const questionSchema = new mongoose.Schema({
   tip: {
     type: String
   },
+  passage: {
+    type: String,
+    default: null
+  },
   question: {
     type: String,
     required: true
