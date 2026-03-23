@@ -100,7 +100,7 @@ main { max-width: 1140px; margin: 0 auto; padding: 32px 24px 80px; }
 .qs-sub { font-size: 0.88rem; color: #6A8EA0; line-height: 1.6; }
 .streak-fire {
   display: inline-flex; align-items: center; gap: 6px;
-  background: #FEF3C7; border: 1px solid #FCD34D; color: #D97706;
+  background: #C3EEFA; border: 1px solid #9DCAEB; color: #2E5A6B;
   padding: 4px 14px; border-radius: 100px; font-size: 0.82rem; font-weight: 700;
 }
 .btn-big-start {

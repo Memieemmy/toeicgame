@@ -2,13 +2,13 @@
 :root {
   --primary: #1E3A8A;
   --primary-light: #2D55C8;
-  --secondary: #F59E0B;
+  --secondary: #5BA3C9;
   --success: #10B981;
   --danger: #EF4444;
-  --bg: #F0F4FF;
+  --bg: #DAFAFA;
   --white: #FFFFFF;
-  --text: #1E293B;
-  --text-muted: #64748B;
+  --text: #1A3A4A;
+  --text-muted: #6A8EA0;
   --radius: 16px;
   --shadow: 0 4px 24px rgba(30,58,138,0.12);
   --shadow-lg: 0 8px 40px rgba(30,58,138,0.18);
@@ -37,38 +37,39 @@ nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   display: flex; align-items: center; justify-content: space-between;
   padding: 16px 32px;
-  background: rgba(15,23,42,0.92);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid #AFD5F0;
 }
 
 .nav-logo {
   font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px;
-  color: #fff; text-decoration: none;
+  color: #1A3A4A; text-decoration: none;
   display: flex; align-items: center; gap: 8px;
 }
-.nav-logo span { color: var(--secondary); }
+.nav-logo span { color: #5BA3C9; }
 
-.nav-links { display: flex; gap: 8px; align-items: center; }
+.nav-links { display: flex; gap: 4px; align-items: center; }
 .nav-links a {
-  color: rgba(255,255,255,0.75); text-decoration: none;
+  color: #6A8EA0; text-decoration: none;
   font-size: 0.9rem; font-weight: 500; padding: 7px 14px; border-radius: 8px;
   transition: all 0.2s;
 }
 .nav-links a:hover,
 .nav-links a.active {
-  color: #fff; background: rgba(255,255,255,0.1);
+  color: #5BA3C9; background: #DAFAFA;
 }
 
 .btn-nav {
-  background: var(--secondary) !important;
-  color: #0F172A !important;
+  background: linear-gradient(135deg, #5BA3C9, #9DCAEB) !important;
+  color: #fff !important;
   font-weight: 700 !important;
   border-radius: 10px !important;
   padding: 8px 20px !important;
+  box-shadow: 0 2px 8px rgba(93,163,201,0.25) !important;
 }
 .btn-nav:hover {
-  background: #FBBF24 !important;
+  box-shadow: 0 4px 16px rgba(93,163,201,0.35) !important;
   transform: translateY(-1px);
 }
 

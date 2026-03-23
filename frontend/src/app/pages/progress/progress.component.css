@@ -67,13 +67,13 @@
 /* ACHIEVEMENTS */
 .achievements-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
 .ach-card { border-radius: 14px; padding: 16px 12px; text-align: center; border: 1.5px solid #AFD5F0; background: #fff; transition: all 0.25s; }
-.ach-card.earned { border-color: #F59E0B; background: #FFFBEB; }
+.ach-card.earned { border-color: #5BA3C9; background: #DAFAFA; }
 .ach-card.locked { opacity: 0.5; filter: grayscale(0.5); }
 .ach-icon { font-size: 2rem; margin-bottom: 8px; }
 .ach-name { font-size: 0.8rem; font-weight: 700; color: #1A3A4A; margin-bottom: 3px; }
 .ach-desc { font-size: 0.72rem; color: #6A8EA0; line-height: 1.4; }
 .ach-label { font-size: 0.68rem; font-weight: 700; margin-top: 8px; }
-.earned-label { color: #F59E0B; }
+.earned-label { color: #5BA3C9; }
 .locked-label { color: #9DCAEB; }
 
 /* CTA ROW */
