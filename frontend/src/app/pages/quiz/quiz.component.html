@@ -18,11 +18,15 @@
 
 <!-- QUIZ SESSION -->
 @if (state() === 'playing' || state() === 'answered') {
-  <div class="quiz-page">
+  <div class="quiz-page" [class.part6]="currentQuestion()?.part === 6" [class.part7]="currentQuestion()?.part === 7">
 
     <!-- SESSION HEADER -->
     <div class="session-header">
-      <span class="session-part">Part {{ currentQuestion()?.part }} · {{ currentQuestion()?.category }}</span>
+      <span class="session-part">
+        @if (currentQuestion()?.part === 5) { 📝 Part 5 · {{ currentQuestion()?.category }} }
+        @if (currentQuestion()?.part === 6) { 📄 Part 6 · Text Completion }
+        @if (currentQuestion()?.part === 7) { 📖 Part 7 · Reading }
+      </span>
       <span class="session-count">ข้อ {{ currentIndex() + 1 }} / {{ totalQuestions() }}</span>
       <span class="session-xp">+{{ (currentIndex() + 1) * 10 }} XP</span>
       <span class="session-timer" [class.warning]="timerWarning()">⏱ {{ timerDisplay() }}</span>
@@ -42,9 +46,24 @@
       </div>
     </div>
 
+    <!-- PASSAGE สำหรับ Part 6 และ Part 7 -->
+    @if (currentQuestion()?.passage) {
+      <div class="passage-card">
+        <div class="passage-label">
+          @if (currentQuestion()?.part === 6) { 📄 บทความ — เติมคำในช่องว่าง }
+          @if (currentQuestion()?.part === 7) { 📖 บทความ — อ่านแล้วตอบคำถาม }
+        </div>
+        <div class="passage-text">{{ currentQuestion()?.passage }}</div>
+      </div>
+    }
+
     <!-- QUESTION CARD -->
     <div class="question-card">
-      <div class="q-type">Part {{ currentQuestion()?.part }} · {{ currentQuestion()?.category }}</div>
+      <div class="q-type">
+        @if (currentQuestion()?.part === 5) { Part 5 · {{ currentQuestion()?.category }} }
+        @if (currentQuestion()?.part === 6) { เลือกคำที่เหมาะสมที่สุดสำหรับช่องว่าง }
+        @if (currentQuestion()?.part === 7) { Reading Comprehension }
+      </div>
       <p class="q-text">{{ currentQuestion()?.question }}</p>
     </div>
 

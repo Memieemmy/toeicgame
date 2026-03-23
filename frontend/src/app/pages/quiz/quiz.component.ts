@@ -60,6 +60,9 @@ export class QuizComponent implements OnInit, OnDestroy {
         this.currentIndex.set(0);
         this.selectedChoice.set(null);
         this.answers.set([]);
+        // ตั้งเวลาตาม Part
+        const timePerQ = part === 7 ? 120 : part === 6 ? 90 : 60; // Part7=2min, Part6=1.5min, Part5=1min
+        this.timerSeconds.set(timePerQ);
         this.state.set('playing');
         this.startTimer();
       },
@@ -70,7 +73,9 @@ export class QuizComponent implements OnInit, OnDestroy {
   }
 
   startTimer() {
-    this.timerSeconds.set(180);
+    const part = this.currentQuestion()?.part || 5;
+    const seconds = part === 7 ? 120 : part === 6 ? 90 : 60;
+    this.timerSeconds.set(seconds);
     this.clearTimer();
     this.timerInterval = setInterval(() => {
       const s = this.timerSeconds();

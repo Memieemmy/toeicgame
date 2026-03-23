@@ -97,6 +97,96 @@ const MOCK_QUESTIONS: Question[] = [
     answer: 2,
     explanation: '"significantly" เป็น adverb ขยาย "ahead of the deadline" แสดงความมากน้อย',
     tags: ['word-form', 'adverb']
+  },
+  // Part 6 mock
+  {
+    _id: 'mock_p6_1', part: 6, category: 'TextCompletion', level: 'intermediate',
+    tip: 'Part 6 ต้องอ่าน passage ทั้งหมดก่อน แล้วเลือกคำที่เข้ากับ context ของประโยคนั้นๆ',
+    passage: `Subject: Annual Sales Conference — Important Updates
+
+Dear All Sales Representatives,
+
+I am writing to inform you about some important changes to our upcoming Annual Sales Conference scheduled for next month. (Q1) ______, we will be moving the venue from the Grand Hotel to the Riverside Convention Center due to unexpected renovations at the original location.
+
+Please note that the conference will still begin at 9:00 A.M. on both days. However, registration will now open at 8:00 A.M. to accommodate the larger number of attendees this year. All participants are required to bring their employee ID cards for verification purposes.
+
+Best regards,
+Thomas Wright`,
+    question: '(Q1) เลือกคำเชื่อมที่เหมาะสมที่สุดสำหรับช่องว่าง',
+    choices: ['Nonetheless', 'Fortunately', 'Furthermore', 'Therefore'],
+    answer: 0,
+    explanation: '"Nonetheless" = อย่างไรก็ตาม ใช้เชื่อมเมื่อมีการแจ้งการเปลี่ยนแปลงหลังจากบอกข้อมูลเบื้องต้น',
+    tags: ['part6', 'conjunction', 'transition']
+  },
+  {
+    _id: 'mock_p6_2', part: 6, category: 'TextCompletion', level: 'intermediate',
+    tip: 'ในการเลือกคำสำหรับ Part 6 ต้องดูทั้ง grammar และ meaning ให้เข้ากับ context',
+    passage: `MEMORANDUM
+TO: All Department Heads
+FROM: Human Resources Department
+RE: Updated Remote Work Policy
+
+Effective April 1, 2026, the company will implement a new hybrid work policy. Under this policy, employees may work remotely for up to three days per week, (Q1) ______ they maintain their productivity targets and attend all required in-person meetings.
+
+Managers are responsible for monitoring their teams' work schedules and ensuring adequate office coverage at all times.`,
+    question: '(Q1) เลือกคำเชื่อมที่แสดงเงื่อนไขที่เหมาะสม',
+    choices: ['provided that', 'even if', 'so that', 'in case'],
+    answer: 0,
+    explanation: '"Provided that" = โดยมีเงื่อนไขว่า ใช้แสดงเงื่อนไขที่ต้องปฏิบัติตาม เหมาะกับ policy ที่มีข้อกำหนด',
+    tags: ['part6', 'conjunction', 'conditional']
+  },
+  // Part 7 mock
+  {
+    _id: 'mock_p7_1', part: 7, category: 'Reading', level: 'intermediate',
+    tip: 'Part 7 อ่าน passage ให้เข้าใจโครงสร้างหลักก่อน แล้วค่อยตอบคำถาม ไม่ต้องจำทุกรายละเอียด',
+    passage: `POSITION: Senior Marketing Manager
+COMPANY: TechVision Solutions
+LOCATION: Bangkok, Thailand
+
+TechVision Solutions, a leading technology company specializing in AI-driven marketing tools, is seeking an experienced Senior Marketing Manager to join our dynamic team.
+
+QUALIFICATIONS:
+• Bachelor's degree in Marketing, Business, or related field (MBA preferred)
+• Minimum 7 years of marketing experience, with at least 3 years in a senior role
+• Excellent communication skills in English and Thai
+
+COMPENSATION:
+• Competitive salary: 120,000–150,000 THB per month
+• Annual performance bonus
+• Professional development allowance: 30,000 THB per year
+
+To apply, send your resume to careers@techvision.co.th by April 30, 2026.`,
+    question: 'How many years of marketing experience is required for this position?',
+    choices: ['At least 3 years', 'At least 5 years', 'At least 7 years', 'At least 10 years'],
+    answer: 2,
+    explanation: '"Minimum 7 years of marketing experience" ระบุไว้ชัดเจนในส่วน QUALIFICATIONS',
+    tags: ['part7', 'reading', 'job-ad']
+  },
+  {
+    _id: 'mock_p7_2', part: 7, category: 'Reading', level: 'intermediate',
+    tip: 'ข้อถามเกี่ยวกับ detail ให้ scan หาคำสำคัญจาก question แล้วหาใน passage',
+    passage: `POSITION: Senior Marketing Manager
+COMPANY: TechVision Solutions
+LOCATION: Bangkok, Thailand
+
+TechVision Solutions, a leading technology company specializing in AI-driven marketing tools, is seeking an experienced Senior Marketing Manager to join our dynamic team.
+
+QUALIFICATIONS:
+• Bachelor's degree in Marketing, Business, or related field (MBA preferred)
+• Minimum 7 years of marketing experience, with at least 3 years in a senior role
+• Excellent communication skills in English and Thai
+
+COMPENSATION:
+• Competitive salary: 120,000–150,000 THB per month
+• Annual performance bonus
+• Professional development allowance: 30,000 THB per year
+
+To apply, send your resume to careers@techvision.co.th by April 30, 2026.`,
+    question: 'What does the job offer for professional development?',
+    choices: ['Free MBA program', 'Monthly training sessions', '30,000 THB annual allowance', 'Overseas training'],
+    answer: 2,
+    explanation: '"Professional development allowance: 30,000 THB per year" ระบุไว้ในส่วน COMPENSATION',
+    tags: ['part7', 'reading', 'detail']
   }
 ];
 

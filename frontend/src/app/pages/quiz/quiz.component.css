@@ -143,6 +143,46 @@
 }
 .btn-home:hover { border-color: #9DCAEB; color: #2E5A6B; background: #DAFAFA; }
 
+/* PASSAGE สำหรับ Part 6, 7 */
+.passage-card {
+  background: #FFFFFF;
+  border: 1.5px solid #AFD5F0;
+  border-left: 4px solid #9DCAEB;
+  border-radius: 16px;
+  padding: 20px 24px;
+  margin-bottom: 16px;
+  max-height: 280px;
+  overflow-y: auto;
+}
+.passage-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #9DCAEB;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.passage-text {
+  font-size: 0.95rem;
+  color: #2E5A6B;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+/* Part 6/7 layout adjustments */
+.quiz-page.part6 .question-card,
+.quiz-page.part7 .question-card {
+  background: #DAFAFA;
+  border-color: #9DCAEB;
+}
+.quiz-page.part7 .passage-card {
+  max-height: 320px;
+}
+
 @media (max-width: 640px) {
   .quiz-page { padding: 80px 16px 40px; }
   .question-card { padding: 20px; }
