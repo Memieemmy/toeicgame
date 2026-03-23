@@ -7,17 +7,17 @@
   --border:         #AFD5F0;
   --border-hover:   #9DCAEB;
   --border-light:   #C3EEFA;
-  --primary:        #5BA3C9;
-  --primary-btn:    linear-gradient(135deg, #5BA3C9 0%, #9DCAEB 100%);
-  --primary-light:  #9DCAEB;
+  --primary:        #9DCAEB;
+  --primary-btn:    #9DCAEB;
+  --primary-light:  #C3EEFA;
   --primary-soft:   #DAFAFA;
   --text-primary:   #1A3A4A;
   --text-body:      #2E5A6B;
   --text-muted:     #6A8EA0;
-  --text-on-primary: #FFFFFF;
-  --shadow-sm: 0 1px 4px rgba(93,163,201,0.10), 0 1px 2px rgba(93,163,201,0.06);
-  --shadow-md: 0 4px 16px rgba(93,163,201,0.14), 0 2px 8px rgba(93,163,201,0.08);
-  --shadow-lg: 0 8px 32px rgba(93,163,201,0.18), 0 4px 16px rgba(93,163,201,0.10);
+  --text-on-primary: #1A3A4A;
+  --shadow-sm: 0 1px 4px rgba(157,202,235,0.10), 0 1px 2px rgba(157,202,235,0.06);
+  --shadow-md: 0 4px 16px rgba(157,202,235,0.14), 0 2px 8px rgba(157,202,235,0.08);
+  --shadow-lg: 0 8px 32px rgba(157,202,235,0.18), 0 4px 16px rgba(157,202,235,0.10);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
@@ -38,15 +38,15 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 .btn-primary {
-  background: linear-gradient(135deg, #5BA3C9 0%, #9DCAEB 100%);
-  color: #FFFFFF; font-weight: 800;
+  background: #9DCAEB;
+  color: #1A3A4A; font-weight: 800;
   border: none; cursor: pointer; border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(93,163,201,0.25); transition: all 0.25s;
+  box-shadow: 0 4px 16px rgba(157,202,235,0.20); transition: all 0.25s;
 }
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(93,163,201,0.35); }
+.btn-primary:hover { background: #AFD5F0; transform: translateY(-2px); box-shadow: 0 6px 24px rgba(157,202,235,0.25); }
 .btn-secondary {
-  background: #FFFFFF; color: #5BA3C9;
+  background: #FFFFFF; color: #2E5A6B;
   border: 1.5px solid #AFD5F0; cursor: pointer; border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(93,163,201,0.08); transition: all 0.25s;
+  box-shadow: 0 2px 8px rgba(157,202,235,0.08); transition: all 0.25s;
 }
 .btn-secondary:hover { background: #DAFAFA; border-color: #9DCAEB; transform: translateY(-2px); }

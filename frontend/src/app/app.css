@@ -1,8 +1,8 @@
 /* ── CSS Variables ── */
 :root {
-  --primary: #1E3A8A;
-  --primary-light: #2D55C8;
-  --secondary: #5BA3C9;
+  --primary: #9DCAEB;
+  --primary-light: #C3EEFA;
+  --secondary: #9DCAEB;
   --success: #10B981;
   --danger: #EF4444;
   --bg: #DAFAFA;
@@ -10,8 +10,8 @@
   --text: #1A3A4A;
   --text-muted: #6A8EA0;
   --radius: 16px;
-  --shadow: 0 4px 24px rgba(30,58,138,0.12);
-  --shadow-lg: 0 8px 40px rgba(30,58,138,0.18);
+  --shadow: 0 4px 24px rgba(157,202,235,0.12);
+  --shadow-lg: 0 8px 40px rgba(157,202,235,0.18);
 }
 
 /* ── Reset ── */
@@ -37,9 +37,9 @@ nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   display: flex; align-items: center; justify-content: space-between;
   padding: 16px 32px;
-  background: rgba(255,255,255,0.92);
+  background: #FFFFFF;
   backdrop-filter: blur(16px);
-  border-bottom: 1px solid #AFD5F0;
+  border-bottom: 1px solid #C3EEFA;
 }
 
 .nav-logo {
@@ -47,7 +47,7 @@ nav {
   color: #1A3A4A; text-decoration: none;
   display: flex; align-items: center; gap: 8px;
 }
-.nav-logo span { color: #5BA3C9; }
+.nav-logo span { color: #9DCAEB; }
 
 .nav-links { display: flex; gap: 4px; align-items: center; }
 .nav-links a {
@@ -57,19 +57,20 @@ nav {
 }
 .nav-links a:hover,
 .nav-links a.active {
-  color: #5BA3C9; background: #DAFAFA;
+  color: #2E5A6B; background: #DAFAFA;
 }
 
 .btn-nav {
-  background: linear-gradient(135deg, #5BA3C9, #9DCAEB) !important;
-  color: #fff !important;
+  background: #9DCAEB !important;
+  color: #1A3A4A !important;
   font-weight: 700 !important;
   border-radius: 10px !important;
   padding: 8px 20px !important;
-  box-shadow: 0 2px 8px rgba(93,163,201,0.25) !important;
+  box-shadow: 0 2px 8px rgba(157,202,235,0.20) !important;
 }
 .btn-nav:hover {
-  box-shadow: 0 4px 16px rgba(93,163,201,0.35) !important;
+  background: #AFD5F0 !important;
+  box-shadow: 0 4px 16px rgba(157,202,235,0.25) !important;
   transform: translateY(-1px);
 }
 
